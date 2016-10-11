@@ -3,8 +3,9 @@
 
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
+from flask_login import UserMixin
 
-class Customer(db.Model):
+class Customer(db.Model, UserMixin):
 
     username = db.Column(db.String(), primary_key=True)
     password = db.Column(db.String(), nullable=False)
@@ -23,3 +24,10 @@ class Customer(db.Model):
 
     def __repr__(self):
         return 'Customer {}'.format(self.username)
+
+    # for flask-login
+    def get_id(self):
+        return self.username
+
+    def verify_password(self, password):
+        return self.password == password
