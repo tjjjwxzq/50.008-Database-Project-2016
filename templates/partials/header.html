@@ -1,21 +1,37 @@
-<nav class="navbar navbar-default">
+<header>
+  <nav class="navbar navbar-default">
 
-  <div class="container-fluid">
+    <div class="container-fluid">
 
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-nav" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="glyphicon glyphicon-menu-hamburger"></span>
-      </button>
-      <a class="navbar-brand">Bookstore</a>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-nav" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </button>
+        <a class="navbar-brand">Bookstore</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="header-nav">
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user %}
+            <li><a href="#">Logout</a></li>
+          {% else %}
+            <li><a href="{{ url_for('customer_login') }}">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
     </div>
 
-    <div class="collapse navbar-collapse" id="header-nav">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Login</a></li>
-      </ul>
-    </div>
+  </nav>
 
-  </div>
-
-</nav>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+</header>

@@ -1,0 +1,19 @@
+{% extends "layout/base.html" %}
+{% block title %}Customer Login{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('customer_login')}}">
+  {{ form.csrf_token}}
+  <div class="form-group">
+    {{ form.username.label }}
+    {{ form.username(class="form-control", placeholder="Username")}}
+  </div>
+  <div class="form-group">
+    {{ form.password.label}}
+    {{ form.password(class="form-control", placeholder="Password")}}
+    <span class="help-block">Minimum 6 characters in length</span>
+  </div>
+
+  <input type="submit" class="btn btn-primary" value="Login"/>
+</form>
+{% endblock %}
