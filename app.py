@@ -3,7 +3,7 @@ from functools import wraps
 import flask
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, current_user
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -38,14 +38,26 @@ def customer_sign_up():
 # Customer Login
 @app.route('/customer/login', methods=['GET', 'POST'])
 def customer_login():
+    # Handle form POST request
     form = CustomerLoginForm()
 
     if form.validate_on_submit():
         customer = Customer.query.get(form.username.data)
 
-        if customer and customer.verify_password(form.password.data) and login_user(customer):
+        if customer.verify_password(form.password.data) and login_user(customer):
             flask.flash('Logged in successfully!')
 
             return flask.redirect(flask.url_for('index'))
 
+        else:
+            flask.flash('Failed to log in. Username or password was incorrect.')
+
     return flask.render_template('login.html', form=form)
+
+# Customer Logout
+@app.route('/customer/logout')
+@login_required
+def customer_logout():
+    logout_user()
+    flask.flash('Logged out successfully!')
+    return flask.redirect(flask.url_for('customer_login'))
