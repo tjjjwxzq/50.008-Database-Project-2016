@@ -1,19 +1,22 @@
+{% from 'macros.html' import render_field %}
 {% extends "layout/base.html" %}
 {% block title %}Customer Login{% endblock %}
 
 {% block content %}
-<form method="POST" action="{{ url_for('customer_login')}}">
-  {{ form.csrf_token}}
-  <div class="form-group">
-    {{ form.username.label }}
-    {{ form.username(class="form-control", placeholder="Username")}}
-  </div>
-  <div class="form-group">
-    {{ form.password.label}}
-    {{ form.password(class="form-control", placeholder="Password")}}
-    <span class="help-block">Minimum 6 characters in length</span>
-  </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-offset-2">
 
-  <input type="submit" class="btn btn-primary" value="Login"/>
-</form>
+      <h1>Customer Login</h1>
+
+      <form method="POST" action="{{ url_for('customer_login')}}">
+        {{ form.csrf_token}}
+        {{ render_field(form.username, class="form-control", placeholder="Username") }}
+        {{ render_field(form.password, class="form-control", placeholder="Password") }}
+        <input type="submit" class="btn btn-primary" value="Login"/>
+      </form>
+
+    </div>
+  </div>
+</div>
 {% endblock %}

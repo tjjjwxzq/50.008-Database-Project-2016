@@ -1,0 +1,18 @@
+{% macro render_field(field) %}
+
+  {% if field.errors %}
+    <div class="form-group has-error">
+      {{ field.label }}
+      {{ field(**kwargs)|safe }}
+      <span class='help-block'>
+        {{ '; '.join(field.errors) }}
+      </span>
+    </div>
+  {% else %}
+    <div class="form-group">
+      {{ field.label }}
+      {{ field(**kwargs)|safe }}
+    </div>
+  {% endif %}
+
+{% endmacro %}
