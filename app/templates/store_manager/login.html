@@ -1,0 +1,21 @@
+{% from "macros.html" import render_field %}
+{% extends "layout/base.html" %}
+{% block title %}Store Manager Login{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-offset-2">
+
+      <h1>Store Manager Login</h1>
+
+      <form method="POST" action="{{ url_for('store_manager.login') }}">
+        {{ form.csrf_token }}
+        {{ render_field(form.username, class="form-control", placeholder="Username") }}
+        {{ render_field(form.password, class="form-control", placeholder="Password") }}
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
