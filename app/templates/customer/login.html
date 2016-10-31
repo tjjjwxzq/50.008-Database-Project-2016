@@ -9,7 +9,7 @@
 
       <h1>Customer Login</h1>
 
-      <form method="POST" action="{{ url_for('customer_login')}}">
+      <form method="POST" action="{{ url_for('customer.login')}}">
         {{ form.csrf_token}}
         {{ render_field(form.username, class="form-control", placeholder="Username") }}
         {{ render_field(form.password, class="form-control", placeholder="Password") }}
