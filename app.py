@@ -13,7 +13,19 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 from models import Customer
-from forms import CustomerLoginForm
+from forms import CustomerLoginForm, CustomerSignUpForm
+
+# HELPERS
+def save(resource):
+    db.session.add(resource)
+
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return False
 
 # LOGIN HELPERS
 @login_manager.user_loader
@@ -30,10 +42,22 @@ def index():
 # Customer Registration
 @app.route('/customer/sign_up', methods=['GET', 'POST'])
 def customer_sign_up():
-    form = CustomerSignupForm()
+    form = CustomerSignUpForm()
 
     if form.validate_on_submit():
-        pass
+        customer_params = form.data.copy()
+        del customer_params['password_confirmation']
+        new_customer = Customer(**customer_params)
+
+        if save(new_customer):
+            login_user(new_customer)
+            flask.flash('Your account was successfully created! Welcome to DBookstore!')
+
+            return flask.redirect(flask.url_for('index'))
+        else:
+            flask.flash('Account creation was unsuccessful. Please try again.')
+
+    return flask.render_template('customer/sign_up.html', form=form)
 
 # Customer Login
 @app.route('/customer/login', methods=['GET', 'POST'])
@@ -52,7 +76,7 @@ def customer_login():
         else:
             flask.flash('Failed to log in. Username or password was incorrect.')
 
-    return flask.render_template('login.html', form=form)
+    return flask.render_template('customer/login.html', form=form)
 
 # Customer Logout
 @app.route('/customer/logout')
