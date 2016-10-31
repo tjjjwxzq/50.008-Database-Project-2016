@@ -1,9 +1,8 @@
 # pylint: disable=invalid-name
 # pylint: disable=too-many-arguments
 
-from app import db, bcrypt
+from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.ext.hybrid import hybrid_property
 from flask_login import UserMixin
 
 class Customer(db.Model, UserMixin):
@@ -36,7 +35,7 @@ class Customer(db.Model, UserMixin):
 class StoreManager(db.Model, UserMixin):
 
     username = db.Column(db.String(), primary_key=True)
-    _password = db.Column(db.String(), nullable=False)
+    password = db.Column(db.String(), nullable=False)
 
     def __init__(self, username, password):
         self.username = username
@@ -48,13 +47,5 @@ class StoreManager(db.Model, UserMixin):
     def get_id(self):
         return self.username
 
-    @hybrid_property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, plaintext):
-        self._password = bcrypt.generate_password_hash(plaintext)
-
-    def verify_password(self, plaintext):
-        return bcrypt.check_password_hash(self.password, plaintext)
+    def verify_password(self, password):
+        return self.password == password
