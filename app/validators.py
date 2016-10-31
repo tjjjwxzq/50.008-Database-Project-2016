@@ -12,3 +12,16 @@ class RecordExists():
         record = self.model.query.filter_by(**{self.field: field.data}).first()
         if not record:
             raise ValidationError(self.message)
+
+class NoDuplicateRecord():
+    def __init__(self, model, field, message=None):
+        self.model = model
+        self.field = field
+        if not message:
+            message = '{record} with the given {field} already exists'.format(record=model.__name__, field=field)
+        self.message = message
+
+    def __call__(self, form, field):
+        record = self.model.query.filter_by(**{self.field: field.data}).first()
+        if record:
+            raise ValidationError(self.message)
