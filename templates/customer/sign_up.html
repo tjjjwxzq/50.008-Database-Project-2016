@@ -1,0 +1,58 @@
+{% from "macros.html" import render_field %}
+{% extends "layout/base.html" %}
+{% block title %}Customer Sign Up{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-offset-2">
+
+      <h1>Customer Sign Up</h1>
+
+      <form method="POST" action="{{ url_for('customer_sign_up') }}">
+        {{ form.csrf_token }}
+        <div class="row">
+          <div class="col-md-6">
+            {{ render_field(form.username, class="form-control", placeholder="Username") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            {{ render_field(form.first_name, class="form-control", placeholder="First name") }}
+          </div>
+          <div class="col-md-6">
+            {{ render_field(form.last_name, class="form-control", placeholder="Last name") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            {{ render_field(form.credit_card_number, class="form-control", placeholder="Credit Card Number") }}
+          </div>
+          <div class="col-md-6">
+            {{ render_field(form.address, class="form-control", placeholder="Address") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            {{ render_field(form.password, class="form-control", placeholder="Password") }}
+          </div>
+          <div class="col-md-6">
+            {{ render_field(form.password_confirmation, class="form-control", placeholder="Password confirmation") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <input type="submit" class="btn btn-primary" value="Sign Up"/>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

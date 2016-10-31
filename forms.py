@@ -1,12 +1,25 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, EqualTo
 from validators import RecordExists
 from models import Customer
 
 class CustomerLoginForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired(),
+    username = StringField('Username', validators=[DataRequired(),
                                                    RecordExists(Customer, 'username')])
-    password = PasswordField('password',
+    password = PasswordField('Password',
                              validators=[DataRequired(),
                                          Length(min=6, message='Password should be at least 6 characters long')])
+
+class CustomerSignUpForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    first_name = StringField('First name', validators=[DataRequired()])
+    last_name = StringField('Last name', validators=[DataRequired()])
+    credit_card_number = StringField('Credit Card Number', validators=[DataRequired(),
+                                                                       Length(min=10, max=19)])
+    address = StringField('Address', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(),
+                                                   Length(min=6, message='Password should be at least 6 characters long')])
+    password_confirmation = PasswordField('Password Confirmation', validators=[DataRequired(),
+                                                                             Length(min=6, message='Password should be at least 6 characters long'),
+                                                                             EqualTo('password', message='Passwords must match')])
