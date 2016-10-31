@@ -4,4 +4,4 @@ mod = Blueprint('pages', __name__)
 
 @mod.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('pages/index.html')
