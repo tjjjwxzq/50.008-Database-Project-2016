@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length, EqualTo
-from app.validators import RecordExists
+from app.validators import RecordExists, NoDuplicateRecord
 from app.models import Customer
 
 class CustomerLoginForm(FlaskForm):
@@ -12,7 +12,8 @@ class CustomerLoginForm(FlaskForm):
                                          Length(min=6, message='Password should be at least 6 characters long')])
 
 class CustomerSignUpForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired(),
+                                                   NoDuplicateRecord(Customer, 'username')])
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
     credit_card_number = StringField('Credit Card Number', validators=[DataRequired(),
