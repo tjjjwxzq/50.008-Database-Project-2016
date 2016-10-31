@@ -13,6 +13,8 @@ login_manager.init_app(app)
 
 from app.views import pages
 from app.views import customer
+from app.views import store_manager
 
 app.register_blueprint(pages.mod)
 app.register_blueprint(customer.mod)
+app.register_blueprint(store_manager.mod)

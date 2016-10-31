@@ -31,3 +31,21 @@ class Customer(db.Model, UserMixin):
 
     def verify_password(self, password):
         return self.password == password
+
+class StoreManager(db.Model, UserMixin):
+
+    username = db.Column(db.String(), primary_key=True)
+    password = db.Column(db.String(), nullable=False)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return 'Store Manager {}'.format(self.username)
+
+    def get_id(self):
+        return self.username
+
+    def verify_password(self, password):
+        return self.password == password

@@ -13,13 +13,18 @@
 
       <div class="collapse navbar-collapse" id="header-nav">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="{{url_for('customer.sign_up') }}">Sign Up</a></li>
-          {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('customer.logout') }}">Logout</a></li>
+          {% if store_manager_logged_in() %}
+            <li><a href="{{ url_for('store_manager.logout') }}">Logout</a></li>
           {% else %}
-            <li><a href="{{ url_for('customer.login') }}">Login</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('customer.logout') }}">Logout</a></li>
+            {% else %}
+              <li><a href="{{ url_for('store_manager.login') }}">Managers</a></li>
+              <li><a href="{{ url_for('customer.login') }}">Login</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('customer.sign_up') }}">Sign Up</a></li>
           {% endif %}
-        </ul>
+          </ul>
       </div>
 
     </div>
