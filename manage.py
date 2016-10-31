@@ -2,7 +2,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from app import app, db
-from seeds import customer
+from seeds import run, clear
 
 migrate = Migrate(app, db)
 manager = Manager(app)
@@ -11,7 +11,13 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def seed():
-    result = db.engine.execute(customer)
+    print('Seeding data...')
+    run()
+
+@manager.command
+def unseed():
+    print('Clearing seed data...')
+    clear()
 
 if __name__ == '__main__':
     manager.run()
