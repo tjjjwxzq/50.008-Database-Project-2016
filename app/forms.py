@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length, EqualTo
 from app.validators import RecordExists, NoDuplicateRecord
-from app.models import Customer
+from app.models import Customer, StoreManager
 
 class CustomerLoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),
@@ -24,3 +24,10 @@ class CustomerSignUpForm(FlaskForm):
     password_confirmation = PasswordField('Password Confirmation', validators=[DataRequired(),
                                                                              Length(min=6, message='Password should be at least 6 characters long'),
                                                                              EqualTo('password', message='Passwords must match')])
+
+class StoreManagerLoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(),
+                                                   RecordExists(StoreManager, 'username')])
+    password = PasswordField('Password',
+                             validators=[DataRequired(),
+                                         Length(min=6, message='Password should be at least 6 characters long')])
