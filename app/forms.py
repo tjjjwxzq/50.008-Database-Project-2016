@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField
+from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Regexp, NumberRange
 from app.validators import RecordExists, NoDuplicateRecord
-from app.models import Customer, StoreManager
+from app.models import Customer, StoreManager, Book
 
 class CustomerLoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),
@@ -31,3 +31,21 @@ class StoreManagerLoginForm(FlaskForm):
     password = PasswordField('Password',
                              validators=[DataRequired(),
                                          Length(min=6, message='Password should be at least 6 characters long')])
+
+class NewBookForm(FlaskForm):
+    ISBN = StringField('ISBN', validators=[DataRequired(),
+                                           Length(min=13,max=13, message='ISBN should be 13 numbers long'),
+                                           Regexp(r'\d{13}', message='ISBN should consist only of numeric characters'),
+                                           NoDuplicateRecord(Book, 'ISBN')])
+    title = StringField('Title', validators=[DataRequired()])
+    authors = StringField('Authors', validators=[DataRequired()])
+    publisher = StringField('Publisher', validators=[DataRequired()])
+    year_of_publication = IntegerField('Year of Publication', validators=[DataRequired(),
+                                                                         NumberRange(min=1900, max=3000, message='Publication year should be a valid year')])
+    stock = IntegerField('Stock', validators=[InputRequired(),
+                                              NumberRange(min=0, message='Stock should be a valid number')])
+    price = DecimalField('Price', validators=[DataRequired(),
+                                              NumberRange(min=0, message='Price should be a valid number')])
+    format = SelectField('Format', choices=[('hardcover', 'Hardcover'), ('softcover', 'Softcover')])
+    subject = StringField('Subject', validators=[DataRequired()])
+    keywords = StringField('Keywords', validators=[DataRequired()])
