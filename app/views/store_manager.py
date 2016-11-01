@@ -1,8 +1,9 @@
 from functools import wraps
 from flask import Blueprint, render_template, redirect, flash, url_for, session
 from app import app
-from app.forms import StoreManagerLoginForm
-from app.models import StoreManager
+from app.forms import StoreManagerLoginForm, NewBookForm
+from app.models import StoreManager, Book
+from app.helpers import save
 
 mod = Blueprint('store_manager', __name__, url_prefix='/store_manager')
 
@@ -57,3 +58,29 @@ def logout():
     session.pop('store_manager', None)
     flash('Logged out successfully!')
     return redirect(url_for('store_manager.login'))
+
+@mod.route('/book/new', methods=['GET', 'POST'])
+@login_required
+def new_book():
+    # Handle form POST request
+    form = NewBookForm()
+
+    if form.validate_on_submit():
+        book_params = form.data.copy()
+        book_params['authors'] = [author.strip() for author in book_params['authors'].split(',')]
+        book_params['keywords'] = [keyword.strip() for keyword in book_params['keywords'].split(',')]
+
+        book = Book(**book_params)
+
+        if save(book):
+            flash('New book created successfully!')
+
+            return redirect(url_for('store_manager.edit_book'))
+        else:
+            flash('Failed to create new book. Please try again.')
+
+    return render_template('store_manager/book/new.html', form=form)
+
+@mod.route('/book/edit', methods=['GET', 'PATCH'])
+def edit_book():
+    pass
