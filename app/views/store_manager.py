@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import Blueprint, render_template, redirect, flash, url_for, session
 from app import app
-from app.forms import StoreManagerLoginForm, NewBookForm
+from app.forms import StoreManagerLoginForm, NewBookForm, EditBookForm
 from app.models import StoreManager, Book
 from app.helpers import save
 
@@ -75,12 +75,30 @@ def new_book():
         if save(book):
             flash('New book created successfully!')
 
-            return redirect(url_for('store_manager.edit_book'))
+            return redirect(url_for('store_manager.edit_book', ISBN=book.ISBN))
         else:
             flash('Failed to create new book. Please try again.')
 
     return render_template('store_manager/book/new.html', form=form)
 
-@mod.route('/book/edit', methods=['GET', 'PATCH'])
-def edit_book():
-    pass
+@mod.route('/book/<ISBN>/edit', methods=['GET', 'POST'])
+def edit_book(ISBN):
+    # Handle form PUT request
+    book = Book.query.get(ISBN)
+    form = EditBookForm(obj=book)
+
+    if form.validate_on_submit():
+        authors = [author.strip() for author in form.data['authors'].split(',')]
+        keywords = [keyword.strip() for keyword in form.data['keywords'].split(',')]
+
+        form.populate_obj(book)
+        book.authors = authors
+        book.keywords = keywords
+
+        if save(book):
+            flash('Book details updated successfully!')
+
+        else:
+            flash('Failed to update book details. Please try again.')
+
+    return render_template('store_manager/book/edit.html', form=form, book=book)
