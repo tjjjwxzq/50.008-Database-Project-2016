@@ -14,4 +14,5 @@ def book_index():
 @mod.route('/books/<ISBN>')
 @login_required
 def show_book(ISBN):
-    pass
+    book = Book.query.get(ISBN)
+    return render_template('my/book/show.html', book=book)

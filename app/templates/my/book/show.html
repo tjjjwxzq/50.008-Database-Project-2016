@@ -1,0 +1,53 @@
+{% extends "layout/base.html" %}
+{% block title %}Book {{ book.title }}{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my/book/show.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>
+        {{ book.title }}
+        <small>by {{ ', '.join(book.authors) }}</small>
+      </h1>
+
+      <div class="row">
+        <div class="col-md-12">
+          <p>
+            <strong>ISBN:</strong>
+            {{ '{}-{}'.format(book.ISBN[0:3], book.ISBN[3:]) }}
+          </p>
+          <p>
+            <strong>Publisher:</strong>
+            {{ book.publisher }}
+          </p>
+          <p>
+            <strong>Year of Publication:</strong>
+            {{ book.year_of_publication }}
+          </p>
+          <p>
+            <strong>Stock:</strong>
+            {{ book.stock }}
+          </p>
+          <p>
+            <strong>Price:</strong>
+            ${{ book.price }}
+          </p>
+          <p>
+            <strong>Format:</strong>
+            {{ book.format }}
+          </p>
+          <p>
+            <strong>Keywords:</strong>
+            {{ ', '.join(book.keywords) }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
