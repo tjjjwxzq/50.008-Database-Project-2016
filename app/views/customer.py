@@ -7,6 +7,8 @@ from app.helpers import save
 
 mod = Blueprint('customer', __name__, url_prefix='/customer')
 
+login_manager.login_view = "customer.login"
+
 @login_manager.user_loader
 def load_customer(customer_username):
     return Customer.query.get(customer_username)
