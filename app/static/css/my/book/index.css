@@ -1,0 +1,14 @@
+@import url('/static/css/base.css');
+
+.thumbnail {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+
+}
+
+.thumbnail > p {
+  text-align: center;
+}
