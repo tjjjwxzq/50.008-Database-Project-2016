@@ -59,7 +59,13 @@ def logout():
     flash('Logged out successfully!')
     return redirect(url_for('store_manager.login'))
 
-@mod.route('/book/new', methods=['GET', 'POST'])
+@mod.route('/books')
+@login_required
+def book_index():
+    books = Book.query.all()
+    return render_template('store_manager/book/index.html', books=books)
+
+@mod.route('/books/new', methods=['GET', 'POST'])
 @login_required
 def new_book():
     # Handle form POST request
@@ -81,7 +87,8 @@ def new_book():
 
     return render_template('store_manager/book/new.html', form=form)
 
-@mod.route('/book/<ISBN>/edit', methods=['GET', 'POST'])
+@mod.route('/books/<ISBN>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_book(ISBN):
     # Handle form PUT request
     book = Book.query.get(ISBN)

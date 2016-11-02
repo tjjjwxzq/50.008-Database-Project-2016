@@ -1,0 +1,27 @@
+{% extends "layout/base.html" %}
+{% block title %}Store Manager - Book Index{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/store_manager/book/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>Book Index</h1>
+
+      <div class="row">
+        {% for book in books %}
+        <div class="col-md-3">
+          <a href="{{ url_for('store_manager.edit_book', ISBN=book.ISBN)}}" class="thumbnail">
+            <p><strong>{{ book.title }}</strong></p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
