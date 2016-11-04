@@ -66,3 +66,9 @@ class EditBookForm(FlaskForm):
     format = SelectField('Format', choices=[('hardcover', 'Hardcover'), ('softcover', 'Softcover')])
     subject = StringField('Subject', validators=[DataRequired()])
     keywords = StringField('Keywords', validators=[DataRequired()])
+
+class FilterBooksForm(FlaskForm):
+    authors = StringField('Authors')
+    publisher = StringField('Publisher')
+    title = StringField('Title')
+    subject = StringField('Subject')
