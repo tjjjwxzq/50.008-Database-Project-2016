@@ -3,7 +3,6 @@
 
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.schema import PrimaryKeyConstraint
 from sqlalchemy.schema import CheckConstraint
 from flask_login import UserMixin
 
@@ -16,7 +15,7 @@ class Customer(db.Model, UserMixin):
     credit_card_number = db.Column(db.String(), nullable=False)
     address = db.Column(db.String(), nullable=False)
     reviews = db.relationship('Review',
-                              backref=db.backref('customer',lazy='joined'),
+                              backref=db.backref('customer', lazy='joined'),
                               lazy='dynamic'
                              )
 
@@ -71,10 +70,10 @@ class Book(db.Model):
     subject = db.Column(db.String(), nullable=False)
     keywords = db.Column(ARRAY(db.String()), nullable=False)
     reviews = db.relationship('Review',
-                              backref=db.backref('book',lazy='joined'),
+                              backref=db.backref('book', lazy='joined'),
                               lazy='dynamic'
                              )
- 
+
     def __init__(self, **kwargs):
         self.ISBN = kwargs['ISBN']
         self.title = kwargs['title']
@@ -98,21 +97,17 @@ class Review(db.Model):
     description = db.Column(db.String(), nullable=True)
     date = db.Column(db.Date(), nullable=False)
 
-
     def __init__(self, **kwargs):
+        self.ISBN = kwargs['ISBN']
+        self.username = kwargs['username']
         self.score = kwargs['score']
         self.description = kwargs['description']
         self.date = kwargs['date']
-        self.ISBN = kwargs['ISBN']
-        self.username = kwargs['username']
 
     def __repr__(self):
-        return 'Review on {} by {} '.format(self.ISBN,self.username)
+        return 'Review on {} by {}'.format(self.ISBN, self.username)
 
     __tablename__ = 'review'
     __tableargs__ = (
         CheckConstraint('score<=10 AND score>=0', name='score_between_0_and_10'),
     )
-
-
-
