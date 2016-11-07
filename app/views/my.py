@@ -34,8 +34,7 @@ def book_index():
 @login_required
 def show_book(ISBN):
     book = Book.query.get(ISBN)
-    form = CreateReviewForm()
-    return render_template('my/book/show.html', book=book, form=form)
+    return render_template('my/book/show.html', book=book)
 
 @mod.route('/books/<ISBN>/reviews', methods=['GET', 'POST'])
 @login_required
