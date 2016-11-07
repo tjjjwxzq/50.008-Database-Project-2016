@@ -3,6 +3,7 @@
 
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.schema import PrimaryKeyConstraint
 from sqlalchemy.schema import CheckConstraint
 from flask_login import UserMixin
 from inflection import humanize
