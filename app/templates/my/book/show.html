@@ -1,3 +1,4 @@
+{% from "macros.html" import render_field %}
 {% extends "layout/base.html" %}
 {% block title %}Book {{ book.title }}{% endblock %}
 {% block css %}
@@ -5,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -49,10 +51,19 @@
 
       <div class="row">
         <div class="col-md-12">
-
           <div class="panel panel-default">
-            
-            <div class="panel-heading">Reviews</div>
+
+            <div class="panel-heading clearfix">
+              <div class="panel-title pull-left">
+                Reviews
+              </div>
+              <div class="pull-right">
+                <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-lg">
+                Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+              </div>
+            </div>
+
             <div class="panel-body">
               <p>Check out Reviews on {{ book.title }} by other customers! </p>
             </div>
@@ -75,22 +86,19 @@
                     <div class="col-md-3">
                       {{ review.username }}
                     </div>
-
-                                
-                  </div>                
+                  </div>
                 </li>
+
               {% endfor %}
 
             </ul>
-         
 
           </div>
-
-
         </div>
       </div>
 
     </div>
   </div>
 </div>
+
 {% endblock %}
