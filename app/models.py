@@ -3,6 +3,8 @@
 
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.schema import PrimaryKeyConstraint
+from sqlalchemy.schema import CheckConstraint
 from flask_login import UserMixin
 
 class Customer(db.Model, UserMixin):
@@ -13,6 +15,10 @@ class Customer(db.Model, UserMixin):
     last_name = db.Column(db.String(), nullable=False)
     credit_card_number = db.Column(db.String(), nullable=False)
     address = db.Column(db.String(), nullable=False)
+    reviews = db.relationship('Review',
+                            backref=db.backref('customer',lazy='dynamic'),
+                            lazy='dynamic'
+                            )
 
     def __init__(self, username, password, first_name, last_name, credit_card_number, address):
         self.username = username
@@ -64,6 +70,10 @@ class Book(db.Model):
     format = db.Column(db.Enum('hardcover', 'softcover', name='formats'), nullable=False)
     subject = db.Column(db.String(), nullable=False)
     keywords = db.Column(ARRAY(db.String()), nullable=False)
+    reviews = db.relationship('Review',
+                            backref=db.backref('book',lazy='dynamic'),
+                            lazy='dynamic'
+                            )
 
     def __init__(self, **kwargs):
         self.ISBN = kwargs['ISBN']
@@ -79,3 +89,31 @@ class Book(db.Model):
 
     def __repr__(self):
         return '{} ISBN: {}'.format(self.title, self.ISBN)
+
+class Review(db.Model):
+
+    score = db.Column(db.Integer(),nullable=False)
+    description = db.Column(db.String(),nullable=True)
+    date = db.Column(db.Date(),nullable=False)
+    ISBN = db.Column(db.String(13),db.ForeignKey('book.ISBN'))
+    username = db.Column(db.String(),db.ForeignKey('customer.username'))
+
+    def __init__(self, **kwargs):
+        self.score = kwargs['score']
+        self.description = kwargs['description']
+        self.date = kwargs['date']
+        self.ISBN = kwargs['ISBN']
+        self.username = kwargs['username']
+
+    def __repr__(self):
+        return 'Review on {} by {} '.format(self.ISBN,self.username)
+
+    __tablename__ = 'review'
+    __tableargs__ = (
+        PrimaryKeyConstraint('ISBN', 'username'),
+        CheckConstraint('score<=10 AND score>=0', name='score_between_0_and_10'),
+
+        )
+
+
+
