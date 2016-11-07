@@ -1,22 +1,12 @@
 import time
-<<<<<<< HEAD
 from flask import Blueprint, render_template, redirect, flash, url_for, request
-=======
-from flask import Blueprint, render_template, redirect, flash, url_for
->>>>>>> b1241fc... Add Create Book Review. Modified to check if user has already created review already
 from flask_login import login_required, current_user
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
-<<<<<<< HEAD
 from app.models import Book, Review, Order, BooksOrders
 from app.helpers import save
 from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm
-=======
-from app.models import Customer, Book, Review
-from app.helpers import save
-from app.forms import FilterBooksForm, CreateReviewForm
->>>>>>> b1241fc... Add Create Book Review. Modified to check if user has already created review already
 
 mod = Blueprint('my', __name__, url_prefix='/my')
 
@@ -47,12 +37,7 @@ def book_index():
 @login_required
 def show_book(ISBN):
     book = Book.query.get(ISBN)
-<<<<<<< HEAD
     return render_template('my/book/show.html', book=book)
-=======
-    form = CreateReviewForm()
-    return render_template('my/book/show.html', book=book, form=form)
->>>>>>> b1241fc... Add Create Book Review. Modified to check if user has already created review already
 
 @mod.route('/books/<ISBN>/reviews', methods=['GET', 'POST'])
 @login_required
@@ -82,8 +67,6 @@ def create_book_review(ISBN):
             flash("You have already entered a review for this book.")
 
     return render_template('my/book/new.html', book=book, form=form)
-<<<<<<< HEAD
-
 
 @mod.route('/orders/')
 @login_required
@@ -197,5 +180,3 @@ def submit_order():
     flash('Something went wrong when submitting your order. Please try again.')
 
     return redirect(url_for('my.current_order'))
-=======
->>>>>>> b1241fc... Add Create Book Review. Modified to check if user has already created review already
