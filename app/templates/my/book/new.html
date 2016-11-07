@@ -3,33 +3,29 @@
 {% block title %}Book {{ book.title }} - New Review{% endblock %}
 
 {% block content %}
-
 <div class="container">
   <div class="row">
     <div class="col-md-12">
 
       <h1>
-        {{ book.title }}
-        <small>New Review</small>
+        New Review
+        <small>{{ book.title }}</small>
       </h1>
 
       <div class="row">
         <div class="col-md-12">
 
           <form method="POST" action="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}">
-          {{ form.csrf_token}}
-          {{ render_field(form.score, class="form-control", placeholder="Score - from 0 to 10") }}
-          {{ render_field(form.description, class="form-control", placeholder="Description") }}
-          <input type="submit" class="btn btn-success" value="Create"/>
-        </form>
+            {{ form.csrf_token}}
+            {{ render_field(form.score, class="form-control", placeholder="Score - from 0 to 10") }}
+            {{ render_field(form.description, class="form-control", placeholder="Description") }}
+            <input type="submit" class="btn btn-success" value="Create"/>
+          </form>
 
         </div>
       </div>
 
-
     </div>
   </div>
 </div>
-
-
 {% endblock %}
