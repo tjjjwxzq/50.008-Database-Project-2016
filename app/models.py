@@ -16,9 +16,9 @@ class Customer(db.Model, UserMixin):
     credit_card_number = db.Column(db.String(), nullable=False)
     address = db.Column(db.String(), nullable=False)
     reviews = db.relationship('Review',
-                            backref=db.backref('customer',lazy='dynamic'),
-                            lazy='dynamic'
-                            )
+                              backref=db.backref('customer',lazy='joined'),
+                              lazy='dynamic'
+                             )
 
     def __init__(self, username, password, first_name, last_name, credit_card_number, address):
         self.username = username
@@ -71,10 +71,10 @@ class Book(db.Model):
     subject = db.Column(db.String(), nullable=False)
     keywords = db.Column(ARRAY(db.String()), nullable=False)
     reviews = db.relationship('Review',
-                            backref=db.backref('book',lazy='dynamic'),
-                            lazy='dynamic'
-                            )
-
+                              backref=db.backref('book',lazy='joined'),
+                              lazy='dynamic'
+                             )
+ 
     def __init__(self, **kwargs):
         self.ISBN = kwargs['ISBN']
         self.title = kwargs['title']
@@ -92,11 +92,12 @@ class Book(db.Model):
 
 class Review(db.Model):
 
-    score = db.Column(db.Integer(),nullable=False)
-    description = db.Column(db.String(),nullable=True)
-    date = db.Column(db.Date(),nullable=False)
-    ISBN = db.Column(db.String(13),db.ForeignKey('book.ISBN'))
-    username = db.Column(db.String(),db.ForeignKey('customer.username'))
+    ISBN = db.Column(db.String(13), db.ForeignKey('book.ISBN'), primary_key=True)
+    username = db.Column(db.String(), db.ForeignKey('customer.username'), primary_key=True)
+    score = db.Column(db.Integer(), nullable=False)
+    description = db.Column(db.String(), nullable=True)
+    date = db.Column(db.Date(), nullable=False)
+
 
     def __init__(self, **kwargs):
         self.score = kwargs['score']
@@ -110,10 +111,8 @@ class Review(db.Model):
 
     __tablename__ = 'review'
     __tableargs__ = (
-        PrimaryKeyConstraint('ISBN', 'username'),
         CheckConstraint('score<=10 AND score>=0', name='score_between_0_and_10'),
-
-        )
+    )
 
 
 
