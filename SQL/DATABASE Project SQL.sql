@@ -45,11 +45,11 @@ CREATE TABLE book_orders (
 	order_id SERIAL,  
 	copies INTEGER NOT NULL,
 	book_ISBN CHAR(14) NOT NULL,
-	PRIMARY KEY(order_id),
+	PRIMARY KEY(order_id, book_ISBN),
 	FOREIGN KEY(book_ISBN) REFERENCES Books, 
-	FOREIGN KEY(order_id) REFERENCES Customer_orders); 
+	FOREIGN KEY(order_id) REFERENCES Orders); 
 
-CREATE TABLE Customer_orders (
+CREATE TABLE Orders (
 	order_id SERIAL,
 	order_date DATE, 
 	order_status CHAR(9),
