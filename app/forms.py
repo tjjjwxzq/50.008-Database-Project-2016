@@ -80,4 +80,3 @@ class CreateReviewForm(FlaskForm):
 
 class CreateOrderForm(FlaskForm):
     pass
-

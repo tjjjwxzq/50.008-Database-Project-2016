@@ -55,4 +55,3 @@ def clear():
     db.engine.execute(delete_store_manager)
     db.engine.execute(delete_books)
     db.engine.execute(delete_reviews)
-
