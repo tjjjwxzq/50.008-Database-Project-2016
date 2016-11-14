@@ -39,6 +39,10 @@ delete_reviews = text(
     'DELETE FROM review'
 )
 
+delete_orders = text(
+    'DELETE FROM "order"'
+)
+
 def run():
     db.engine.execute(insert_customer)
     db.engine.execute(insert_store_manager)
@@ -46,7 +50,9 @@ def run():
     db.engine.execute(insert_reviews)
 
 def clear():
+    db.engine.execute(delete_orders)
     db.engine.execute(delete_customer)
     db.engine.execute(delete_store_manager)
     db.engine.execute(delete_books)
     db.engine.execute(delete_reviews)
+
