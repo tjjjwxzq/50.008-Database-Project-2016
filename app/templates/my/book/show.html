@@ -89,7 +89,7 @@
                     <div class="col-md-3">
                       <div class="row">
                         {% for feedback in review.feedbacks %}
-                          {{ feedback.rating }}
+                          {{ feedback.rating }} by {{ feedback.customer_feedback }} <br/>
                         {% endfor %}
                       </div>
                       <div class="row">

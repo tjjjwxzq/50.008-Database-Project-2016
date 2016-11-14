@@ -199,7 +199,7 @@ def create_feedback(ISBN,user):
             'customer_review': review.username,
             'ISBN': ISBN
         }
-        if Feedback.query.filter_by(customer_feedback=current_user.get_id(), ISBN=book.ISBN).first() is None:
+        if Feedback.query.filter_by(customer_feedback=current_user.get_id(), ISBN=book.ISBN, customer_review=user).first() is None:
             if (current_user.get_id()!=review.username):
                 feedback = Feedback(**feedback_params)
 
@@ -213,6 +213,5 @@ def create_feedback(ISBN,user):
                 flash("You may not create feedback for your own review")
         else:
             flash("You have already entered a feedback.")
-
 
     return render_template('my/book/show.html', book=book, review=review, form=form)
