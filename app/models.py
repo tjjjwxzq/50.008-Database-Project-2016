@@ -18,6 +18,10 @@ class Customer(db.Model, UserMixin):
                               backref=db.backref('customer', lazy='joined'),
                               lazy='dynamic'
                              )
+    orders = db.relationship('Order',
+                             backref=db.backref('customer',lazy='joined'),
+                             lazy='dynamic'
+                             )
 
     def __init__(self, username, password, first_name, last_name, credit_card_number, address):
         self.username = username
@@ -111,3 +115,24 @@ class Review(db.Model):
     __tableargs__ = (
         CheckConstraint('score<=10 AND score>=0', name='score_between_0_and_10'),
     )
+
+class Order(db.Model):
+
+    id = db.Column(db.Integer(), primary_key=True)
+    date = db.Column(db.Date(), nullable=False)
+    status = db.Column(db.Enum('pending','shipped', name='order_statuses'), nullable=False)
+    customer_username = db.Column(db.String(), db.ForeignKey('customer.username'))
+    book = db.relationship('Book', lazy='dynamic')
+    def __init__(self, **kwargs):
+        self.date = kwargs['date']
+        self.status = kwargs['status']
+        self.customer_username = kwargs['customer_username']
+
+    def __repr(self):
+        return 'Order {} by Customer {}'.format(self.id, self.customer_username)
+
+books_orders = db.Table('books_orders',
+                        db.Column('book_ISBN', db.String(13), db.ForeignKey('book.ISBN'), nullable=False),
+                        db.Column('order_id', db.Integer(), db.ForeignKey('order.id'), nullable=False)
+                        )
+
