@@ -27,15 +27,15 @@
       </div>
     </div>
 
-      <div class="row">
-        {% for book in books %}
-        <div class="col-md-3">
-          <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
-            <p><strong>{{ book.title }}</strong></p>
-          </a>
-        </div>
-        {% endfor %}
+    <div class="row">
+      {% for book in books %}
+      <div class="col-md-3">
+        <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
+          <p><strong>{{ book.title }}</strong></p>
+        </a>
       </div>
+      {% endfor %}
+    </div>
 
     </div>
   </div>

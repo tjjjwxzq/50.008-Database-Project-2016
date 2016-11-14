@@ -1,3 +1,4 @@
+{% from "macros.html" import render_field %}
 {% extends "layout/base.html" %}
 {% block title %}Book {{ book.title }}{% endblock %}
 {% block css %}
@@ -44,6 +45,54 @@
             <strong>Keywords:</strong>
             {{ ', '.join(book.keywords) }}
           </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+
+            <div class="panel-heading clearfix">
+              <div class="panel-title pull-left">
+                Reviews
+              </div>
+              <div class="pull-right">
+                <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-lg">
+                Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+              </div>
+            </div>
+
+            <div class="panel-body">
+              <p>Check out Reviews on {{ book.title }} by other customers! </p>
+            </div>
+
+            <ul class="list-group">
+
+              {% for review in book.reviews %}
+
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-md-3">
+                      {{ review.score }}
+                    </div>
+                    <div class="col-md-3">
+                      {{ review.description }}
+                    </div>
+                    <div class="col-md-3">
+                      {{ review.date }}
+                    </div>
+                    <div class="col-md-3">
+                      {{ review.username }}
+                    </div>
+                  </div>
+                </li>
+
+              {% endfor %}
+
+            </ul>
+
+          </div>
         </div>
       </div>
 

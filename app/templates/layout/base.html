@@ -8,11 +8,12 @@
     {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
   </head>
 
   <body>
     {% include "partials/header.html" ignore missing %}
     {% block content %}{% endblock %}
   </body>
-
 </html>

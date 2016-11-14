@@ -30,12 +30,23 @@ delete_books = text(
     'DELETE FROM book'
 )
 
+insert_reviews = text(
+    """INSERT INTO review ("ISBN", username, score, description, date) VALUES
+    ('9780321197849', 'user1', 9, 'Very Informative like MeiHui', CURRENT_DATE)"""
+)
+
+delete_reviews = text(
+    'DELETE FROM review'
+)
+
 def run():
     db.engine.execute(insert_customer)
     db.engine.execute(insert_store_manager)
     db.engine.execute(insert_books)
+    db.engine.execute(insert_reviews)
 
 def clear():
     db.engine.execute(delete_customer)
     db.engine.execute(delete_store_manager)
     db.engine.execute(delete_books)
+    db.engine.execute(delete_reviews)
