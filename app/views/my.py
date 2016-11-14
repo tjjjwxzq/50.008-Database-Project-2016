@@ -4,9 +4,9 @@ from flask_login import login_required, current_user
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
-from app.models import Customer, Book, Review
+from app.models import Customer, Book, Review, Order
 from app.helpers import save
-from app.forms import FilterBooksForm, CreateReviewForm
+from app.forms import FilterBooksForm, CreateReviewForm, CreateOrderForm
 
 mod = Blueprint('my', __name__, url_prefix='/my')
 
@@ -64,3 +64,25 @@ def create_book_review(ISBN):
             flash("You have already entered a review for this book.")
 
     return render_template('my/book/new.html', book=book, form=form)
+
+@mod.route('/orders', methods=['GET', 'POST'])
+@login_required
+def create_order():
+    form = CreateOrderForm()
+
+    if form.validate_on_submit():
+
+        order_params = {
+          'date' : time.strftime('%Y-%m-%d%'),
+          'status' : 'pending',
+          'customer_username' : current_user.get_id()
+        }
+        order = Order(**order_params)
+
+        if save(order):
+            flash('Order created successfully')
+
+        else:
+            flash('Failed to create order')
+
+    return render_template('my/order/new.html',form=form)
