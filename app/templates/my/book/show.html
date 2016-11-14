@@ -79,10 +79,26 @@
                       {{ review.description }}
                     </div>
                     <div class="col-md-3">
-                      {{ review.date }}
+                      <div class="row">
+                        {{ review.username }}
+                      </div>
+                      <div class="row">
+                        {{ review.date }}
+                      </div>
                     </div>
                     <div class="col-md-3">
-                      {{ review.username }}
+                      <div class="row">
+                        {% for feedback in review.feedbacks %}
+                          {{ feedback.rating }}
+                        {% endfor %}
+                      </div>
+                      <div class="row">
+                        <form method="POST" action="{{ url_for('my.create_feedback', ISBN=book.ISBN, user=review.username) }}">
+                          {{ form.csrf_token }}
+                          {{ form.rating }}
+                          <input type="submit" class="btn btn-success" value="Create"/>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </li>

@@ -4,9 +4,9 @@ from flask_login import login_required, current_user
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
-from app.models import Book, Review, Order, BooksOrders
+from app.models import Book, Review, Order, BooksOrders, Feedback
 from app.helpers import save
-from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm
+from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm, CreateFeedbackForm
 
 mod = Blueprint('my', __name__, url_prefix='/my')
 
@@ -37,7 +37,8 @@ def book_index():
 @login_required
 def show_book(ISBN):
     book = Book.query.get(ISBN)
-    return render_template('my/book/show.html', book=book)
+    form = CreateFeedbackForm()
+    return render_template('my/book/show.html', book=book, form=form)
 
 @mod.route('/books/<ISBN>/reviews', methods=['GET', 'POST'])
 @login_required
@@ -180,3 +181,38 @@ def submit_order():
     flash('Something went wrong when submitting your order. Please try again.')
 
     return redirect(url_for('my.current_order'))
+
+@mod.route('/books/<ISBN>/<user>', methods=['GET', 'POST'])
+@login_required
+def create_feedback(ISBN,user):
+    form = CreateFeedbackForm()
+
+    book = Book.query.get(ISBN)
+
+    review = Review.query.filter_by(username=user, ISBN=ISBN).first()
+
+    if form.validate_on_submit():
+        print(form.rating.data)
+        feedback_params = {
+            'customer_feedback': current_user.get_id(),
+            'rating': form.rating.data,
+            'customer_review': review.username,
+            'ISBN': ISBN
+        }
+        if Feedback.query.filter_by(customer_feedback=current_user.get_id(), ISBN=book.ISBN).first() is None:
+            if (current_user.get_id()!=review.username):
+                feedback = Feedback(**feedback_params)
+
+                if save(feedback):
+                    flash("Feedback created successfully!")
+
+                    return redirect(url_for('my.show_book', ISBN=book.ISBN))
+                else:
+                    flash("Failed to create review. Please try again")
+            else:
+                flash("You may not create feedback for your own review")
+        else:
+            flash("You have already entered a feedback.")
+
+
+    return render_template('my/book/show.html', book=book, review=review, form=form)
