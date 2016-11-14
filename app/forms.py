@@ -77,3 +77,8 @@ class CreateReviewForm(FlaskForm):
     score = IntegerField('Score', validators=[DataRequired(),
                                               NumberRange(min=0,max=10,message='Number should be between 0 to 10')])
     description = StringField('Description')
+
+class CreateOrderForm(FlaskForm):
+    pass
+
+
