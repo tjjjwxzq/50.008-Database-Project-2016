@@ -19,6 +19,7 @@ class Customer(db.Model, UserMixin):
                               backref=db.backref('customer', lazy='joined'),
                               lazy='dynamic'
                              )
+
     orders = db.relationship('Order',
                              backref=db.backref('customer', lazy='joined'),
                              lazy='dynamic'
@@ -81,10 +82,6 @@ class Book(db.Model):
                               backref=db.backref('book', lazy='joined'),
                               lazy='dynamic'
                              )
-    # feedbacks = db.relationship('Feedback',
-    #                           backref=db.backref('book', lazy='joined'),
-    #                           lazy='dynamic'
-    #                          )
 
     def __init__(self, **kwargs):
         self.ISBN = kwargs['ISBN']
