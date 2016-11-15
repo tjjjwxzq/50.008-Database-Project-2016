@@ -10,17 +10,26 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1>Book Index</h1>
+      <h1>
+        Book Index
+        {% if not order_in_progress %}
+          <small>
+            <form method="POST" action="{{ url_for('my.create_order') }}">
+              <input type="submit" class="btn btn-success" value="Start New Order">
+            </form>
+          </small>
+        {% endif %}
+      </h1>
 
       <div class="panel panel-default">
         <div class="panel-body">
 
-          <form class="form-inline" method="post" action="{{ url_for('my.book_index') }}">
-            {{ form.csrf_token }}
-            {{ render_field(form.authors, class="form-control", placeholder="authors - enter names separated by a comma") }}
-            {{ render_field(form.publisher, class="form-control", placeholder="publisher") }}
-            {{ render_field(form.title, class="form-control", placeholder="title") }}
-            {{ render_field(form.subject, class="form-control", placeholder="subject") }}
+          <form class="form-inline" method="POST" action="{{ url_for('my.book_index') }}">
+            {{ filter_form.csrf_token }}
+            {{ render_field(filter_form.authors, class="form-control", placeholder="authors - enter names separated by a comma") }}
+            {{ render_field(filter_form.publisher, class="form-control", placeholder="publisher") }}
+            {{ render_field(filter_form.title, class="form-control", placeholder="title") }}
+            {{ render_field(filter_form.subject, class="form-control", placeholder="subject") }}
             <input type="submit" class="btn btn-primary" value="search">
           </form>
 
@@ -31,8 +40,17 @@
       {% for book in books %}
       <div class="col-md-3">
         <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
-          <p><strong>{{ book.title }}</strong></p>
+          <strong>{{ book.title }}</strong>
         </a>
+
+        {% if order_in_progress %}
+          <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
+            {{ add_book_to_order_forms[loop.index0].csrf_token }}
+            {{ add_book_to_order_forms[loop.index0].isbn(value="{}".format(book.ISBN)) }}
+            {{ render_field(add_book_to_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=book).first().quantity) }}
+            <input type="submit" class="btn btn-success" value="Update Order">
+          </form>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
