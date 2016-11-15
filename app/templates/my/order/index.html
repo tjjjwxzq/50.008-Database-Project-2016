@@ -1,0 +1,42 @@
+{% extends "layout/base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>
+        My Orders
+      </h1>
+
+      <div class="row">
+      {% for order in orders %}
+        <div class="col-md-3">
+          {% if order.status == 'shipped' %}
+            <a href="{{ url_for('my.show_order', order_id=order.id) }}" class="thumbnail bg-success">
+              <h3>Order {{ order.id }}</h3>
+              <strong>Status:</strong>
+              {{ order.formatted_status() }}
+            </a>
+          {% elif order.status == 'pending' %}
+            <a href="{{ url_for('my.show_order', order_id=order.id) }}" class="thumbnail bg-warning">
+              <h3>Order {{ order.id }}</h3>
+              <strong>Status:</strong>
+              {{ order.formatted_status() }}
+            </a>
+          {% else %}
+            <a href="{{ url_for('my.show_order', order_id=order.id) }}" class="thumbnail bg-info">
+              <h3>Order {{ order.id }}</h3>
+              <strong>Status:</strong>
+              {{ order.formatted_status() }}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

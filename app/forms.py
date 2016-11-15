@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, DateField
+from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, HiddenField
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Regexp, NumberRange
 from app.validators import RecordExists, NoDuplicateRecord
 from app.models import Customer, StoreManager, Book
@@ -78,5 +78,6 @@ class CreateReviewForm(FlaskForm):
                                               NumberRange(min=0,max=10,message='Number should be between 0 to 10')])
     description = StringField('Description')
 
-class CreateOrderForm(FlaskForm):
-    pass
+class AddBookToOrderForm(FlaskForm):
+    isbn = HiddenField()
+    quantity = IntegerField('Quantity', validators=[DataRequired()])

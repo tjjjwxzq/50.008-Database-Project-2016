@@ -1,0 +1,59 @@
+{% extends "layout/base.html" %}
+{% block title %}My Curent Order{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>
+        Order {{ order.id }}
+        <small>{{ order.formatted_status() }}</small>
+      </h1>
+
+      {% if order.status == 'in_progress' %}
+      <p>This order is still in progress. When you are done <a href="{{ url_for('my.book_index') }}">selecting books</a> for this order, you can submit it by clicking the button below</p>
+      {% else %}
+      <p><strong>Submitted:</strong> {{ order.date }}</p>
+      {% endif %}
+      <p><strong>Total:</strong> ${{ order.total_price() }}</p>
+
+      <div class="row">
+        {% for books_orders in order.books_orders %}
+          <div class="col-md-3">
+            <a href="{{ url_for('my.show_book', ISBN=books_orders.book.ISBN)}}" class="thumbnail">
+              <h3>{{ books_orders.book.title }}</h3>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>Quantity</strong>
+                  {{ books_orders.quantity }}
+                </div>
+                <div class="col-md-6">
+                  <strong>Price</strong>
+                  ${{ books_orders.book.price }}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <strong>Total</strong>
+                  ${{ books_orders.total_price() }}
+                </div>
+              </div>
+
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if order.status == 'in_progress' %}
+      <form method="POST" action="{{ url_for('my.submit_order') }}">
+        <input type='submit' class='btn btn-success' value='Submit Order'>
+      </form>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
