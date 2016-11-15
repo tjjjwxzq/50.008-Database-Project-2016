@@ -5,6 +5,7 @@ from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.schema import CheckConstraint
 from flask_login import UserMixin
+from inflection import humanize
 
 class Customer(db.Model, UserMixin):
 
@@ -40,6 +41,9 @@ class Customer(db.Model, UserMixin):
 
     def verify_password(self, password):
         return self.password == password
+
+    def order_in_progress(self):
+        return self.orders.filter_by(status='in_progress').first()
 
 class StoreManager(db.Model):
 
@@ -120,19 +124,35 @@ class Order(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     date = db.Column(db.Date(), nullable=False)
-    status = db.Column(db.Enum('pending', 'shipped', name='order_statuses'), nullable=False)
+    status = db.Column(db.Enum('in_progress', 'pending', 'shipped', name='order_statuses'), nullable=False)
     customer_username = db.Column(db.String(), db.ForeignKey('customer.username'))
-    book = db.relationship('Book', lazy='dynamic')
 
     def __init__(self, **kwargs):
         self.date = kwargs['date']
         self.status = kwargs['status']
         self.customer_username = kwargs['customer_username']
 
-    def __repr(self):
+    def __repr__(self):
         return 'Order {} by Customer {}'.format(self.id, self.customer_username)
 
-books_orders = db.Table('books_orders',
-                        db.Column('book_ISBN', db.String(13), db.ForeignKey('book.ISBN'), nullable=False),
-                        db.Column('order_id', db.Integer(), db.ForeignKey('order.id'), nullable=False)
-                       )
+    def total_price(self):
+        return sum([books_orders.quantity * books_orders.book.price for books_orders in self.books_orders])
+
+    def formatted_status(self):
+        return humanize(self.status)
+
+class BooksOrders(db.Model):
+
+    order_id = db.Column(db.Integer(), db.ForeignKey('order.id'), primary_key=True)
+    book_isbn = db.Column(db.String(13), db.ForeignKey('book.ISBN'), primary_key=True)
+    quantity = db.Column(db.Integer(), nullable=False, default=1)
+    order = db.relationship('Order',
+                            backref=db.backref('books_orders', lazy='dynamic', cascade='all, delete-orphan'),
+                            lazy='joined')
+    book = db.relationship('Book')
+
+    def __init__(self, **kwargs):
+        self.quantity = kwargs['quantity']
+
+    def total_price(self):
+        return self.quantity * self.book.price

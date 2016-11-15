@@ -19,7 +19,7 @@ def upgrade():
     op.create_table('order',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('status', sa.Enum('pending', 'shipped', name='order_statuses'), nullable=False),
+    sa.Column('status', sa.Enum('in_progress', 'pending', 'shipped', name='order_statuses'), nullable=False),
     sa.Column('customer_username', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['customer_username'], ['customer.username'], ),
     sa.PrimaryKeyConstraint('id')
