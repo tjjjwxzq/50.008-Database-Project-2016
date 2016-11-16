@@ -17,7 +17,7 @@
 
           <form method="POST" action="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}">
             {{ form.csrf_token}}
-            {{ render_field(form.score, class="form-control", placeholder="Score - from 0 to 10") }}
+            {{ render_field(form.score, class="form-control", placeholder="Score - from 0 to 10", type="number", min=0, max=10) }}
             {{ render_field(form.description, class="form-control", placeholder="Description") }}
             <input type="submit" class="btn btn-success" value="Create"/>
           </form>

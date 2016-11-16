@@ -38,7 +38,11 @@ def book_index():
 def show_book(ISBN):
     book = Book.query.get(ISBN)
     form = CreateFeedbackForm()
-    return render_template('my/book/show.html', book=book, form=form)
+
+    current_user_review = current_user.reviews.filter_by(ISBN=ISBN).first()
+    print (current_user_review)
+
+    return render_template('my/book/show.html', book=book, form=form, current_user_review=current_user_review)
 
 @mod.route('/books/<ISBN>/reviews', methods=['GET', 'POST'])
 @login_required
@@ -67,7 +71,7 @@ def create_book_review(ISBN):
         else:
             flash("You have already entered a review for this book.")
 
-    return render_template('my/book/new.html', book=book, form=form)
+    return render_template('my/book/review/new.html', book=book, form=form)
 
 @mod.route('/orders/')
 @login_required
@@ -182,7 +186,7 @@ def submit_order():
 
     return redirect(url_for('my.current_order'))
 
-@mod.route('/books/<ISBN>/<user>', methods=['GET', 'POST'])
+@mod.route('/books/<ISBN>/<user>', methods=['POST'])
 @login_required
 def create_feedback(ISBN,user):
     form = CreateFeedbackForm()
@@ -208,7 +212,7 @@ def create_feedback(ISBN,user):
 
                     return redirect(url_for('my.show_book', ISBN=book.ISBN))
                 else:
-                    flash("Failed to create review. Please try again")
+                    flash("Failed to create feedback. Please try again")
             else:
                 flash("You may not create feedback for your own review")
         else:

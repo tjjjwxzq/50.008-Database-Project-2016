@@ -57,9 +57,13 @@
                 Reviews
               </div>
               <div class="pull-right">
-                <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-lg">
-                Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </a>
+                {% if not current_user_review %}
+
+                  <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-lg">
+                  Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                  </a>
+
+                {% endif %}
               </div>
             </div>
             <div class="panel-body">

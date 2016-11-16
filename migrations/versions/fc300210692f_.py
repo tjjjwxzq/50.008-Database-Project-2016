@@ -1,14 +1,14 @@
 """empty message
 
-Revision ID: 71567015d02e
-Revises: bb300afb7c74
-Create Date: 2016-11-14 03:49:47.367464
+Revision ID: fc300210692f
+Revises: 6edec4b28fec
+Create Date: 2016-11-16 03:05:31.158129
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '71567015d02e'
-down_revision = 'bb300afb7c74'
+revision = 'fc300210692f'
+down_revision = '6edec4b28fec'
 
 from alembic import op
 import sqlalchemy as sa
@@ -23,8 +23,7 @@ def upgrade():
     sa.Column('ISBN', sa.String(length=13), nullable=False),
     sa.ForeignKeyConstraint(['customer_feedback'], ['customer.username'], ),
     sa.ForeignKeyConstraint(['customer_review', 'ISBN'], [u'review.username', u'review.ISBN'], ),
-    sa.PrimaryKeyConstraint('customer_feedback', 'customer_review', 'ISBN'),
-    sa.CheckConstraint('rating<=2 AND rating>=0', name='rating_between_0_and_2')
+    sa.PrimaryKeyConstraint('customer_feedback', 'customer_review', 'ISBN')
     )
     ### end Alembic commands ###
 
