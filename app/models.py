@@ -3,7 +3,7 @@
 
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.schema import CheckConstraint
+from sqlalchemy.schema import CheckConstraint, ForeignKeyConstraint
 from flask_login import UserMixin
 from inflection import humanize
 
@@ -104,6 +104,10 @@ class Review(db.Model):
     score = db.Column(db.Integer(), nullable=False)
     description = db.Column(db.String(), nullable=True)
     date = db.Column(db.Date(), nullable=False)
+    feedbacks = db.relationship('Feedback',
+                              backref=db.backref('review', lazy='joined'),
+                              lazy='dynamic'
+                             )
 
     def __init__(self, **kwargs):
         self.ISBN = kwargs['ISBN']
@@ -156,3 +160,25 @@ class BooksOrders(db.Model):
 
     def total_price(self):
         return self.quantity * self.book.price
+
+class Feedback(db.Model):
+
+    customer_feedback = db.Column(db.String(), db.ForeignKey('customer.username'), primary_key=True) #customer giving feedback
+    rating = db.Column(db.Integer(), nullable=False)
+    customer_review = db.Column(db.String(), primary_key=True) #customer who has reviewed a book
+    ISBN = db.Column(db.String(13), primary_key=True)
+
+    def __init__(self, **kwargs):
+        self.customer_feedback = kwargs['customer_feedback']
+        self.rating = kwargs['rating']
+        self.customer_review = kwargs['customer_review']
+        self.ISBN = kwargs['ISBN']
+
+    def __repr__(self):
+        return 'Feedback by {} on Review submitted by {} on {}'.format(self.customer_feedback, self.customer_review, self.ISBN)
+
+    __tablename__ = 'feedback'
+    __tableargs__ = (
+        CheckConstraint('score<=2 AND score>=0', name='score_between_0_and_2'),
+        ForeignKeyConstraint([customer_review, ISBN], [Review.username, Review.ISBN]),
+    )

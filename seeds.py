@@ -3,7 +3,8 @@ from sqlalchemy import text
 
 insert_customer = text(
     """INSERT INTO customer VALUES
-    ('user1', 'password', 'foo', 'bar', '12345678', '8 Somapah Rd')"""
+    ('user1', 'password', 'foo', 'bar', '12345678', '8 Somapah Rd'),
+    ('user2', 'password2', 'foo', 'bar', '12345678', '8 Somapah Rd')"""
 )
 
 delete_customer = text(
@@ -43,15 +44,28 @@ delete_orders = text(
     'DELETE FROM "order"'
 )
 
+insert_feedbacks = text(
+    """INSERT INTO feedback (customer_feedback, rating, customer_review, "ISBN") VALUES
+    ('user2', 2, 'user1', '9780321197849')"""
+)
+
+delete_feedbacks = text(
+    'DELETE FROM feedback'
+)
+
 def run():
     db.engine.execute(insert_customer)
     db.engine.execute(insert_store_manager)
     db.engine.execute(insert_books)
     db.engine.execute(insert_reviews)
+    db.engine.execute(insert_feedbacks)
 
 def clear():
     db.engine.execute(delete_orders)
+    db.engine.execute(delete_feedbacks)
+    db.engine.execute(delete_reviews)
+    db.engine.execute(delete_books)
     db.engine.execute(delete_customer)
     db.engine.execute(delete_store_manager)
-    db.engine.execute(delete_books)
-    db.engine.execute(delete_reviews)
+
+

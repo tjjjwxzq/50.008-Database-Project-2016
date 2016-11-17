@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, HiddenField
+from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, HiddenField, RadioField
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Regexp, NumberRange
 from app.validators import RecordExists, NoDuplicateRecord
 from app.models import Customer, StoreManager, Book
@@ -81,3 +81,6 @@ class CreateReviewForm(FlaskForm):
 class AddBookToOrderForm(FlaskForm):
     isbn = HiddenField()
     quantity = IntegerField('Quantity', validators=[DataRequired()])
+
+class CreateFeedbackForm(FlaskForm):
+    rating = RadioField('Rating', choices=[('0','Not Useful'),('1','Useful'), ('2', 'Very Useful')])
