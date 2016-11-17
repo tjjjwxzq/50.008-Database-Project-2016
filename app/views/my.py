@@ -38,7 +38,6 @@ def book_index():
 def show_book(ISBN):
     book = Book.query.get(ISBN)
     form = CreateFeedbackForm()
-
     current_user_review = current_user.reviews.filter_by(ISBN=ISBN).first()
     print (current_user_review)
 
@@ -190,9 +189,7 @@ def submit_order():
 @login_required
 def create_feedback(ISBN,user):
     form = CreateFeedbackForm()
-
     book = Book.query.get(ISBN)
-
     review = Review.query.filter_by(username=user, ISBN=ISBN).first()
 
     if form.validate_on_submit():

@@ -19,7 +19,6 @@ class Customer(db.Model, UserMixin):
                               backref=db.backref('customer', lazy='joined'),
                               lazy='dynamic'
                              )
-
     orders = db.relationship('Order',
                              backref=db.backref('customer', lazy='joined'),
                              lazy='dynamic'
