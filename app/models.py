@@ -23,6 +23,11 @@ class Customer(db.Model, UserMixin):
                              backref=db.backref('customer', lazy='joined'),
                              lazy='dynamic'
                             )
+    feedbacks = db.relationship('Feedback',
+                                backref=db.backref('customer', lazy='joined'),
+                                lazy='dynamic',
+                                order_by='desc(Feedback.rating)'
+                               )
 
     def __init__(self, username, password, first_name, last_name, credit_card_number, address):
         self.username = username
@@ -77,7 +82,7 @@ class Book(db.Model):
     format = db.Column(db.Enum('hardcover', 'softcover', name='formats'), nullable=False)
     subject = db.Column(db.String(), nullable=False)
     keywords = db.Column(ARRAY(db.String()), nullable=False)
-    reviews = db.relationship('Review',
+    reviewediews = db.relationship('Review',
                               backref=db.backref('book', lazy='joined'),
                               lazy='dynamic'
                              )
