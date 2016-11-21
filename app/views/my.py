@@ -31,7 +31,27 @@ def book_index():
     add_book_to_order_forms = [AddBookToOrderForm() for i in range(len(books))]
     order_in_progress = current_user.order_in_progress()
 
-    return render_template('my/book/index.html', books=books, filter_form=filter_form, add_book_to_order_forms=add_book_to_order_forms, order_in_progress=order_in_progress)
+    # Book recommendation
+    ordered_book_isbn = request.args.get('ordered_book_isbn')
+    if ordered_book_isbn:
+        ordered_book = Book.query.get(ordered_book_isbn)
+        customers_who_ordered_book = [customer for customer in ordered_book.customers() if customer.username != current_user.get_id()]
+
+        recommended_books = []
+        for customer in customers_who_ordered_book:
+            for customer_order in customer.orders.all():
+                for books_orders in customer_order.books_orders.all():
+                    if books_orders.book != ordered_book:
+                        recommended_books.append(books_orders.book)
+
+        recommended_books = sorted(set(recommended_books), key=lambda book: book.total_sales_to_similar_customers(ordered_book))
+    else:
+        ordered_book = None
+        recommended_books = []
+
+    recommended_books_order_forms = [AddBookToOrderForm() for i in range(len(recommended_books))]
+
+    return render_template('my/book/index.html', books=books, filter_form=filter_form, add_book_to_order_forms=add_book_to_order_forms, order_in_progress=order_in_progress, recommended_books=recommended_books, recommended_books_order_forms=recommended_books_order_forms, ordered_book=ordered_book)
 
 @mod.route('/books/<ISBN>')
 @login_required
@@ -39,7 +59,6 @@ def show_book(ISBN):
     book = Book.query.get(ISBN)
     form = CreateFeedbackForm()
     current_user_review = current_user.reviews.filter_by(ISBN=ISBN).first()
-    print (current_user_review)
 
     return render_template('my/book/show.html', book=book, form=form, current_user_review=current_user_review)
 
@@ -120,7 +139,7 @@ def update_order(order_id):
         if save(order):
             flash('Successfully updated number of copies of {} in your current order to {}!'.format(book.title, quantity))
 
-            return redirect(url_for('my.book_index'))
+            return redirect(url_for('my.book_index', ordered_book_isbn=book.ISBN))
         else:
             flash('Failed to add {} to your current order. Please try again'.format(book.title))
 

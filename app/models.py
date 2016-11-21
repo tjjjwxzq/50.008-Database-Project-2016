@@ -102,6 +102,22 @@ class Book(db.Model):
     def __repr__(self):
         return '{} ISBN: {}'.format(self.title, self.ISBN)
 
+    def customers(self):
+        orders_with_book = Order.query.filter(Order.books_orders.any(book=self)).all()
+        customer_usernames = {order.customer_username for order in orders_with_book}
+        return {Customer.query.get(username) for username in customer_usernames}
+
+    def total_sales_to_similar_customers(self, book):
+        similar_customers = self.customers() & book.customers()
+        sales = 0
+
+        for customer in similar_customers:
+            for order in customer.orders.all():
+                for books_orders in order.books_orders.all():
+                    sales += books_orders.quantity
+
+        return sales
+
 class Review(db.Model):
 
     ISBN = db.Column(db.String(13), db.ForeignKey('book.ISBN'), primary_key=True)
@@ -158,7 +174,9 @@ class BooksOrders(db.Model):
     order = db.relationship('Order',
                             backref=db.backref('books_orders', lazy='dynamic', cascade='all, delete-orphan'),
                             lazy='joined')
-    book = db.relationship('Book')
+    book = db.relationship('Book',
+                            backref=db.backref('books_orders', lazy='dynamic'),
+                            lazy='joined')
 
     def __init__(self, **kwargs):
         self.quantity = kwargs['quantity']
