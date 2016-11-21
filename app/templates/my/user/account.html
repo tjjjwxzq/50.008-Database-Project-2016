@@ -1,0 +1,39 @@
+{% extends "layout/base.html" %}
+{% block title %}My Account Information{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+	<div class="col-md-12">
+	  <p>
+        <strong>Username:</strong>
+        {{ user.username }}
+      </p>
+      <p>
+        <strong>Password:</strong>
+        {{ user.password }}
+      </p>
+      <p>
+        <strong>First Name:</strong>
+        {{ user.first_name }}
+      </p>
+      <p>
+        <strong>Last Name:</strong>
+        {{ user.last_name }}
+      </p>
+      <p>
+        <strong>Credit Card Number:</strong>
+        {{ user.credit_card_number }}
+      </p>
+      <p>
+        <strong>Address:</strong>
+        {{ user.address }}
+      </p>
+      <p>
+        <strong>Phone Number:</strong>
+        Nil
+  	  </p>
+	</div>
+  </div>
+</div>
+{% endblock %}

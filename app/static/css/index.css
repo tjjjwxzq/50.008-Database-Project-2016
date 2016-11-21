@@ -1,0 +1,5 @@
+@import url('/static/css/base.css');
+
+.welcome-title {
+	box-shadow: 0 5px 5px #dddddd;
+}

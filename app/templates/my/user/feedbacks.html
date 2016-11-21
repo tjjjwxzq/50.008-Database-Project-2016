@@ -1,0 +1,62 @@
+{% extends "layout/base.html" %}
+{% block title %}My Feedbacks History{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+
+        <div class="panel-heading clearfix">
+          <div class="panel-title pull-left">
+            {{ user.username }}'s Feedbacks
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="row">
+          	<div class="col-md-3">
+          	  Book
+          	</div>
+          	<div class="col-md-3">
+          	  Review Description
+          	</div>
+          	<div class="col-md-3">
+          	  Reviewer
+          	</div>
+          	<div class="col-md-3">
+          	  My Rating
+          	</div>
+          </div>
+        </div>
+
+        <ul class="list-group">
+
+          {% for feedback in user.feedbacks %}
+
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3">
+                  {{ feedback.review.book.title }}
+                </div>
+                <div class="col-md-3">
+                  {{ feedback.review.description }}
+                </div>
+                <div class="col-md-3">
+                  {{ feedback.review.username }}
+                </div>
+                <div class="col-md-3">
+                  {{ feedback.rating }}
+                </div>
+              </div>
+            </li>
+
+          {% endfor %}
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

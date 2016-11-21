@@ -82,7 +82,7 @@ class Book(db.Model):
     format = db.Column(db.Enum('hardcover', 'softcover', name='formats'), nullable=False)
     subject = db.Column(db.String(), nullable=False)
     keywords = db.Column(ARRAY(db.String()), nullable=False)
-    reviewediews = db.relationship('Review',
+    reviews = db.relationship('Review',
                               backref=db.backref('book', lazy='joined'),
                               lazy='dynamic'
                              )

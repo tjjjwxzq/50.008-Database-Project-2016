@@ -1,0 +1,62 @@
+{% extends "layout/base.html" %}
+{% block title %}My Reviews History{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+
+        <div class="panel-heading clearfix">
+          <div class="panel-title pull-left">
+            {{ user.username }}'s Reviews
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="row">
+          	<div class="col-md-3">
+          	  Book
+          	</div>
+          	<div class="col-md-3">
+          	  Score
+          	</div>
+          	<div class="col-md-3">
+          	  Description
+          	</div>
+          	<div class="col-md-3">
+          	  Date
+          	</div>
+          </div>
+        </div>
+
+        <ul class="list-group">
+
+          {% for review in user.reviews %}
+
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3">
+                  {{ review.book.title }}
+                </div>
+                <div class="col-md-3">
+                  {{ review.score }}
+                </div>
+                <div class="col-md-3">
+                  {{ review.description }}
+                </div>
+                <div class="col-md-3">
+                  {{ review.date }}
+                </div>
+              </div>
+            </li>
+
+          {% endfor %}
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
