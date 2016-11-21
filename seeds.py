@@ -44,6 +44,10 @@ delete_orders = text(
     'DELETE FROM "order"'
 )
 
+delete_books_orders = text(
+    'DELETE FROM books_orders'
+)
+
 insert_feedbacks = text(
     """INSERT INTO feedback (customer_feedback, rating, customer_review, "ISBN") VALUES
     ('user2', 2, 'user1', '9780321197849')"""
@@ -61,11 +65,10 @@ def run():
     db.engine.execute(insert_feedbacks)
 
 def clear():
+    db.engine.execute(delete_books_orders)
     db.engine.execute(delete_orders)
     db.engine.execute(delete_feedbacks)
     db.engine.execute(delete_reviews)
     db.engine.execute(delete_books)
     db.engine.execute(delete_customer)
     db.engine.execute(delete_store_manager)
-
-
