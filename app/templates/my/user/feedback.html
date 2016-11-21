@@ -1,5 +1,5 @@
 {% extends "layout/base.html" %}
-{% block title %}My Feedbacks History{% endblock %}
+{% block title %}My Feedback History{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,7 +9,7 @@
 
         <div class="panel-heading clearfix">
           <div class="panel-title pull-left">
-            {{ user.username }}'s Feedbacks
+            {{ user.username }}'s Feedback
           </div>
         </div>
 
@@ -32,7 +32,7 @@
 
         <ul class="list-group">
 
-          {% for feedback in user.feedbacks %}
+          {% for feedback in user.feedback %}
 
             <li class="list-group-item">
               <div class="row">

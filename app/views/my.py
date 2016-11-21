@@ -217,23 +217,23 @@ def create_feedback(ISBN,user):
 
     return render_template('my/book/show.html', book=book, review=review, form=form)
 
-@mod.route('/account', methods=['GET'])
+@mod.route('/account')
 @login_required
 def get_account_information():
-    user = Customer.query.filter_by(username=current_user.get_id()).first()
+    user = Customer.query.get(current_user.get_id())
 
     return render_template('my/user/account.html',user=user)
 
-@mod.route('/reviews', methods=['GET'])
+@mod.route('/reviews')
 @login_required
 def get_review_history():
-    user = Customer.query.filter_by(username=current_user.get_id()).first()
+    user = Customer.query.get(current_user.get_id())
 
     return render_template('my/user/reviews.html',user=user)
 
-@mod.route('/feedbacks', methods=['GET'])
+@mod.route('/feedback')
 @login_required
 def get_feedback_history():
-    user = Customer.query.filter_by(username=current_user.get_id()).first()
+    user = Customer.query.get(current_user.get_id())
 
-    return render_template('my/user/feedbacks.html',user=user)
+    return render_template('my/user/feedback.html',user=user)

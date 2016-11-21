@@ -23,7 +23,7 @@ class Customer(db.Model, UserMixin):
                              backref=db.backref('customer', lazy='joined'),
                              lazy='dynamic'
                             )
-    feedbacks = db.relationship('Feedback',
+    feedback = db.relationship('Feedback',
                                 backref=db.backref('customer', lazy='joined'),
                                 lazy='dynamic',
                                 order_by='desc(Feedback.rating)'
