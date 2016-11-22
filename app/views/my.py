@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
-from app.models import Book, Review, Order, BooksOrders, Feedback
+from app.models import Book, Review, Order, BooksOrders, Feedback, Customer
 from app.helpers import save
 from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm, CreateFeedbackForm
 
@@ -216,3 +216,24 @@ def create_feedback(ISBN,user):
             flash("You have already entered a feedback.")
 
     return render_template('my/book/show.html', book=book, review=review, form=form)
+
+@mod.route('/account')
+@login_required
+def get_account_information():
+    user = Customer.query.get(current_user.get_id())
+
+    return render_template('my/user/account.html',user=user)
+
+@mod.route('/reviews')
+@login_required
+def get_review_history():
+    user = Customer.query.get(current_user.get_id())
+
+    return render_template('my/user/reviews.html',user=user)
+
+@mod.route('/feedback')
+@login_required
+def get_feedback_history():
+    user = Customer.query.get(current_user.get_id())
+
+    return render_template('my/user/feedback.html',user=user)

@@ -23,6 +23,11 @@ class Customer(db.Model, UserMixin):
                              backref=db.backref('customer', lazy='joined'),
                              lazy='dynamic'
                             )
+    feedback = db.relationship('Feedback',
+                                backref=db.backref('customer', lazy='joined'),
+                                lazy='dynamic',
+                                order_by='desc(Feedback.rating)'
+                               )
 
     def __init__(self, username, password, first_name, last_name, credit_card_number, address):
         self.username = username

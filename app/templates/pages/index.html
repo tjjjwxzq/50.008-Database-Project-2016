@@ -1,6 +1,51 @@
 {% extends "layout/base.html" %}
 {% block title %}Home{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
+{% if current_user.is_authenticated %}
+  <div class="container-fluid">
+	<div class="row welcome-title">
+	  <h1 class="text-center">Welcome to the bookstore!</h1>
+	</div>
+  </div>
+
+  <div class="container">
+	<div class="row" style="padding-top:20px;">
+
+ 	  <div class="col-md-2 col-md-offset-1 text-center">
+		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+		<a href="{{ url_for('my.get_account_information') }}">My Account Information</a>
+	  </div>
+
+	  <div class="col-md-2 text-center">
+		<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+		<a href="{{ url_for('my.book_index') }}">Browse Books</a>
+	  </div>
+
+	  <div class="col-md-2 text-center">
+		<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+		<a href="{{ url_for('my.get_review_history') }}">My Review History</a>
+	  </div>
+
+	  <div class="col-md-2 text-center">
+		<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+		<a href="{{ url_for('my.get_feedback_history') }}">My Feedback History</a>
+	  </div>
+
+	  <div class="col-md-2 text-center">
+		<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+		<a href="{{ url_for('my.order_index') }}">My Order History</a>
+	  </div>
+	</div>
+  </div>
+{% else %}
+  <div class="container">
+    <div class="row landing-title">
+      <h1 class="text-center">Dive into the world of Books</h1>
+	</div>
+  </div>
+{% endif %}
 {% endblock %}
