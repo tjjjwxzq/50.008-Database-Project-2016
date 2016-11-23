@@ -1,12 +1,43 @@
+import datetime
 from functools import wraps
 from flask import Blueprint, render_template, redirect, flash, url_for, session
-from app import app
-from app.forms import StoreManagerLoginForm, NewBookForm, EditBookForm
+from sqlalchemy import cast
+from sqlalchemy.dialects.postgresql import ARRAY
+from app import app, db
+from app.forms import StoreManagerLoginForm, NewBookForm, EditBookForm, StatisticsForm
 from app.models import StoreManager, Book
 from app.helpers import save
 
 mod = Blueprint('store_manager', __name__, url_prefix='/store_manager')
 
+# Statistics helpers
+
+def get_publishers():
+    return {book.publisher for book in Book.query.all()}
+
+def get_authors():
+    nested_authors = [book.authors for book in Book.query.all()]
+    return {author for authors in nested_authors for author in authors}
+
+def publisher_sales_in_month(publisher, month, year):
+    books = Book.query.filter_by(publisher=publisher)
+    return sum([book.total_sales_in_month(month, year) for book in books])
+
+def author_sales_in_month(author, month, year):
+    books = Book.query.filter(cast(Book.authors, ARRAY(db.Text())).contains([author]))
+    return sum([book.total_sales_in_month(month, year) for book in books])
+
+def most_popular_publishers_in_month(m, month, year):
+    publishers = [publisher for publisher in get_publishers() if publisher_sales_in_month(publisher, month, year) > 0]
+    return sorted(publishers, key=lambda publisher: publisher_sales_in_month(publisher, month, year), reverse=True)[0:m]
+
+def most_popular_authors_in_month(m, month, year):
+    authors = [author for author in get_authors() if author_sales_in_month(author, month, year) > 0]
+    return sorted(authors, key=lambda author: author_sales_in_month(author, month, year), reverse=True)[0:m]
+
+def most_popular_books_in_month(m, month, year):
+    books = [book for book in Book.query.all() if book.total_sales_in_month(month, year) > 0]
+    return sorted(books, key=lambda book: book.total_sales_in_month(month, year), reverse=True)[0:m]
 # Login helpers, because FLask Login doesn't support multiple user models
 
 def store_manager_logged_in():
@@ -109,3 +140,22 @@ def edit_book(ISBN):
             flash('Failed to update book details. Please try again.')
 
     return render_template('store_manager/book/edit.html', form=form, book=book)
+
+@mod.route('/statistics', methods=['GET', 'POST'])
+@login_required
+def statistics():
+    form = StatisticsForm()
+
+    if form.validate_on_submit():
+        month = form.data['month']
+        number = form.data['number']
+    else:
+        month = datetime.date.today().month
+        number = 10
+
+    year = datetime.date.today().year
+    books = most_popular_books_in_month(number, month, year)
+    authors = most_popular_authors_in_month(number, month, year)
+    publishers = most_popular_publishers_in_month(number, month, year)
+
+    return render_template('store_manager/statistics/show.html', form=form, books=books, authors=authors, publishers=publishers)

@@ -1,0 +1,75 @@
+{% from "macros.html" import render_field %}
+{% extends "layout/base.html" %}
+{% block title %}Store Manager - Statistics{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>Statistics</h1>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Search by Month</h3>
+        </div>
+
+        <div class="panel-body">
+
+          <form class="form-inline" method="POST">
+            {{ form.csrf_token }}
+            {{ render_field(form.month, class="form-control")}}
+            {{ render_field(form.number, class="form-control", placeholder="Number of results")}}
+            <input type="submit" class="btn btn-primary" value="Search"/>
+          </form>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <h2>Most Popular Books</h2>
+        {% if not books %}
+        <p>No books were sold in this month</p>
+        {% endif %}
+
+        {% for book in books %}
+        <div class="col-md-3">
+          <a href="{{ url_for('store_manager.edit_book', ISBN=book.ISBN)}}" class="thumbnail">
+            <p><strong>{{ book.title }}</strong></p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <h2>Most Popular Authors</h2>
+          {% if not books %}
+          <p>No books were sold in this month</p>
+          {% endif %}
+          <ul>
+            {% for author in authors %}
+              <li><strong>{{ author }}</strong></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h2>Most Popular Publishers</h2>
+          {% if not books %}
+          <p>No books were sold in this month</p>
+          {% endif %}
+          <ul>
+            {% for publisher in publishers %}
+              <li><strong>{{ publisher }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
