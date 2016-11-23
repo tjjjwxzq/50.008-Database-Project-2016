@@ -1,6 +1,8 @@
 # pylint: disable=invalid-name
 # pylint: disable=too-many-arguments
 
+import calendar
+import datetime
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.schema import CheckConstraint, ForeignKeyConstraint
@@ -115,6 +117,20 @@ class Book(db.Model):
             for order in customer.orders.all():
                 for books_orders in order.books_orders.all():
                     sales += books_orders.quantity
+
+        return sales
+
+    def total_sales_in_month(self, month, year):
+        num_days = calendar.monthrange(year, month)[1]
+        start_date = datetime.date(year, month, 1)
+        end_date = datetime.date(year, month, num_days)
+
+        orders_in_month = Order.query.filter(Order.books_orders.any(book=self)).filter(Order.date >= start_date).filter(Order.date <= end_date).all()
+
+        sales = 0
+        for order in orders_in_month:
+            for books_orders in order.books_orders.filter_by(book=self):
+                sales += books_orders.quantity
 
         return sales
 
