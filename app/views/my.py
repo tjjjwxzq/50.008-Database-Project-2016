@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
-from app.models import Book, Review, Order, BooksOrders, Feedback
+from app.models import Book, Review, Order, BooksOrders, Feedback, Customer
 from app.helpers import save
 from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm, CreateFeedbackForm
 
