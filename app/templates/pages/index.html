@@ -41,11 +41,52 @@
 	  </div>
 	</div>
   </div>
+{% elif store_manager_logged_in() %}
+ <div class="jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Store Manager</h1>
+
+          <div class="row">
+            <div class="col-md-4">
+              <a href="{{ url_for('store_manager.book_index') }}" class="thumbnail">
+                <p><strong>Browse Books</strong></p>
+              </a>
+            </div>
+
+            <div class="col-md-4">
+              <a href="{{ url_for('store_manager.new_book') }}" class="thumbnail">
+                <p><strong>New Book</strong></p>
+              </a>
+            </div>
+
+            <div class="col-md-4">
+              <a href="{{ url_for('store_manager.statistics') }}" class="thumbnail">
+                <p><strong>Statistics</strong></p>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% else %}
-  <div class="container">
-    <div class="row landing-title">
-      <h1 class="text-center">Dive into the world of Books</h1>
-	</div>
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Welcome to the Bookstore</h1>
+          <p>Get ready to dive into the world of books!</p>
+          <a href="{{ url_for('customer.login') }}" class="btn btn-lg btn-primary">Login</a>
+          <br>
+          OR
+          <br>
+          <a href="{{ url_for('customer.sign_up') }}" class="btn btn-lg btn-default">Sign Up</a>
+        </div>
+      </div>
+    </div>
   </div>
 {% endif %}
 {% endblock %}
