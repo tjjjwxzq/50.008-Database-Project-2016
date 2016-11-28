@@ -85,10 +85,10 @@ def show_book(ISBN):
             top_n_reviews = sorted_reviews[-n:]
             reviews = top_n_reviews
 
-
-    reviews = []
-    for r in reviews_queried:
-        reviews.append((r, get_average_feedback(r), feedback_exists(r)))
+    else:
+        reviews = []
+        for r in reviews_queried:
+            reviews.append((r, get_average_feedback(r), feedback_exists(r)))
 
     return render_template('my/book/show.html', book=book, feedback_form=feedback_form, top_review_form=top_review_form, current_user_review=current_user_review, reviews=reviews, user=current_user.get_id())
 
