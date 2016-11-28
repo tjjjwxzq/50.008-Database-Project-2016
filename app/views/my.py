@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
 from app.models import Book, Review, Order, BooksOrders, Feedback, Customer
 from app.helpers import save
-from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm, CreateFeedbackForm
+from app.forms import FilterBooksForm, CreateReviewForm, AddBookToOrderForm, CreateFeedbackForm, SetNofTopReviewsForm
 
 mod = Blueprint('my', __name__, url_prefix='/my')
 
@@ -64,14 +64,52 @@ def book_index():
                            recommended_books_order_forms=recommended_books_order_forms,
                            ordered_book=ordered_book)
 
-@mod.route('/books/<ISBN>')
+@mod.route('/books/<ISBN>', methods=['GET', 'POST'])
 @login_required
 def show_book(ISBN):
     book = Book.query.get(ISBN)
-    form = CreateFeedbackForm()
+    feedback_form = CreateFeedbackForm()
+    top_review_form = SetNofTopReviewsForm()
     current_user_review = current_user.reviews.filter_by(ISBN=ISBN).first()
+    reviews_queried = Review.query.filter_by(ISBN=ISBN)
 
-    return render_template('my/book/show.html', book=book, form=form, current_user_review=current_user_review)
+    if top_review_form.validate_on_submit():
+        n = top_review_form.num_of_reviews.data
+        if n > 0:
+            whole_reviews = []
+            for review in reviews_queried:
+                avg_of_feedbacks = get_average_feedback(review)
+                whole_reviews.append((review, avg_of_feedbacks, feedback_exists(review)))
+
+            sorted_reviews = sorted(whole_reviews, key=lambda x:x[1])
+            top_n_reviews = sorted_reviews[-n:]
+            reviews = top_n_reviews
+
+
+    reviews = []
+    for r in reviews_queried:
+        reviews.append((r, get_average_feedback(r), feedback_exists(r)))
+
+    return render_template('my/book/show.html', book=book, feedback_form=feedback_form, top_review_form=top_review_form, current_user_review=current_user_review, reviews=reviews, user=current_user.get_id())
+
+def get_average_feedback(review):
+    feedbackList = review.feedbacks
+    temp = []
+    for f in feedbackList:
+        temp.append(f.rating)
+    if len(temp) == 0:
+        mean = -1 #Means no feedback given
+    else:
+        mean = float(sum(temp)) / float(len(temp))
+
+    return mean
+
+def feedback_exists(review):
+    feedbackList = review.feedbacks
+    for f in feedbackList:
+        if f.customer_feedback == current_user.get_id():
+            return True
+    return False
 
 @mod.route('/books/<ISBN>/reviews', methods=['GET', 'POST'])
 @login_required
@@ -218,15 +256,15 @@ def submit_order():
 @mod.route('/books/<ISBN>/<user>', methods=['POST'])
 @login_required
 def create_feedback(ISBN, user):
-    form = CreateFeedbackForm()
+    feedback_form = CreateFeedbackForm()
+    top_review_form = SetNofTopReviewsForm()
     book = Book.query.get(ISBN)
     review = Review.query.filter_by(username=user, ISBN=ISBN).first()
 
-    if form.validate_on_submit():
-        print(form.rating.data)
+    if feedback_form.validate_on_submit():
         feedback_params = {
             'customer_feedback': current_user.get_id(),
-            'rating': form.rating.data,
+            'rating': feedback_form.rating.data,
             'customer_review': review.username,
             'ISBN': ISBN
         }
@@ -245,7 +283,7 @@ def create_feedback(ISBN, user):
         else:
             flash("You have already entered a feedback.")
 
-    return render_template('my/book/show.html', book=book, review=review, form=form)
+    return render_template('my/book/show.html', book=book, review=review, feedback_form=feedback_form, top_review_form=top_review_form)
 
 @mod.route('/account')
 @login_required
