@@ -8,6 +8,12 @@
 {% block content %}
 <div class="container">
   <div class="row">
+    <div class="col-md-3">
+      <a href="{{ url_for('my.book_index') }}" type="button" class="btn back-button"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Books</a>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-12">
 
       <h1>
@@ -54,7 +60,7 @@
 
             <div class="panel-heading clearfix">
               <div class="panel-title pull-left">
-                Reviews
+                Reviews on {{ book.title }}
               </div>
               <div class="pull-right">
                 {% if not current_user_review %}
@@ -66,42 +72,74 @@
                 {% endif %}
               </div>
             </div>
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-md-6">
+                  <form method="POST" action="{{ url_for('my.show_book', ISBN=book.ISBN) }}">
+                    {{ top_review_form.csrf_token}}
+                    {{ render_field(top_review_form.num_of_reviews, class="form-control", placeholder="Number of reviews", type="number") }}
+                    <input type="submit" class="btn btn-success" value="Show"/>
+                  </form>
+                </div>
+              </div>
+            </div>
             <div class="panel-body">
-              <p>Check out Reviews on {{ book.title }} by other customers! </p>
+              <div class="row">
+                <div class="col-md-3">
+                  Review Score
+                </div>
+                <div class="col-md-3">
+                  Review Description
+                </div>
+                <div class="col-md-3">
+                  Reviewer
+                </div>
+                <div class="col-md-3">
+                  Review Rating
+                </div>
+              </div>
             </div>
 
             <ul class="list-group">
 
-              {% for review in book.reviews %}
+              {% for review in reviews %}
 
                 <li class="list-group-item">
                   <div class="row">
                     <div class="col-md-3">
-                      {{ review.score }}
+                      {{ review[0].score }}
                     </div>
                     <div class="col-md-3">
-                      {{ review.description }}
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row">
-                        {{ review.username }}
-                      </div>
-                      <div class="row">
-                        {{ review.date }}
-                      </div>
+                      {{ review[0].description }}
                     </div>
                     <div class="col-md-3">
                       <div class="row">
-                        {% for feedback in review.feedbacks %}
-                          {{ feedback.rating }} by {{ feedback.customer_feedback }} <br/>
-                        {% endfor %}
+                        {{ review[0].username }}
                       </div>
                       <div class="row">
-                        <form method="POST" action="{{ url_for('my.create_feedback', ISBN=book.ISBN, user=review.username) }}">
-                          {{ form.csrf_token }}
-                          {{ form.rating }}
-                          <input type="submit" class="btn btn-success" value="Create"/>
-                        </form>
+                        {{ review[0].date }}
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="row">
+                        {% if review[1] == -1 %}
+                          No Feedback yet
+                        {% else %}
+                          Average Feedback: {{ review[1] }}
+                        {% endif %}
+                      </div>
+                      <div class="row">
+                        {% if review[0].username == user %}
+                          You cannot rate your own review.
+                        {% elif not review[2] %}
+                          <form method="POST" action="{{ url_for('my.create_feedback', ISBN=book.ISBN, user=review[0].username) }}">
+                            {{ feedback_form.csrf_token }}
+                            {{ feedback_form.rating }}
+                            <input type="submit" class="btn btn-success" value="Create"/>
+                          </form>
+                        {% else %}
+                          You have rated review already.
+                        {% endif %}
                       </div>
                     </div>
                   </div>

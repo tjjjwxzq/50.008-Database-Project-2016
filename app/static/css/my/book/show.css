@@ -7,3 +7,12 @@ h1 {
 .panel-title {
 	padding-top: 10px;
 }
+
+.back-button {
+	padding-top: 10px;
+}
+
+ul#rating {
+	list-style: none;
+	padding-left: 10px;
+}
