@@ -84,11 +84,11 @@
               </div>
             </div>
             <div class="panel-body">
-              <div class="row">
-                <div class="col-md-3">
+              <div class="row text-center">
+                <div class="col-md-2">
                   Review Score
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                   Review Description
                 </div>
                 <div class="col-md-3">
@@ -105,15 +105,15 @@
               {% for review in reviews %}
 
                 <li class="list-group-item">
-                  <div class="row">
-                    <div class="col-md-3">
+                  <div class="row text-center">
+                    <div class="col-md-2 review-score">
                       {{ review[0].score }}
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       {{ review[0].description }}
                     </div>
                     <div class="col-md-3">
-                      <div class="row">
+                      <div class="row review-username">
                         {{ review[0].username }}
                       </div>
                       <div class="row">
@@ -121,14 +121,15 @@
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="row">
+                      <div class="row avg-feedback">
                         {% if review[1] == -1 %}
                           No Feedback yet
                         {% else %}
-                          Average Feedback: {{ review[1] }}
+                          Average Feedback: <br/>
+                          <span>{{ review[1] }}</span>
                         {% endif %}
                       </div>
-                      <div class="row">
+                      <div class="row text-center">
                         {% if review[0].username == user %}
                           You cannot rate your own review.
                         {% elif not review[2] %}
