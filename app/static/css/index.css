@@ -62,20 +62,3 @@
   color:white;
   background: black;
 }
-
-.welcome-title h1 {
-  padding-top:20px;
-  padding-bottom: 10px;
-}
-
-.welcome-title span {
-  content: '';
-  display: block;
-  background: black;
-  height: 2px;
-  max-width: 35px;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 10px;
-}
-

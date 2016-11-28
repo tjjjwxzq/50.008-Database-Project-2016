@@ -8,7 +8,7 @@
           <span class="sr-only">Toggle navigation</span>
           <span class="glyphicon glyphicon-menu-hamburger"></span>
         </button>
-        <a href="{{ url_for('pages.index') }}" class="navbar-brand" style="padding:5px 15px"><img class="img-responsive" src="../../static/images/logo4.png" width="60%"></a>
+        <a href="{{ url_for('pages.index') }}" class="navbar-brand" style="padding:5px 15px"><img class="img-responsive" src="{{ url_for('static', filename='images/logo4.png') }}" width="60%"></a>
       </div>
 
       <div class="collapse navbar-collapse" id="header-nav">
