@@ -4,8 +4,14 @@ h1 {
   margin-bottom: 40px;
 }
 
-.panel-title {
-	padding-top: 10px;
+.book-title {
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.book-format {
+	font-style: italic;
+	color: gray;
 }
 
 .back-button {
@@ -17,7 +23,39 @@ ul#rating {
 	padding-left: 10px;
 }
 
+.review {
+	border-right: 1px solid black;
+}
+
+
+.reviews-title {
+	letter-spacing:10px;
+	text-transform: uppercase;
+}
+
+.underline {
+	border-bottom: 0.5px solid black;
+}
+
 .avg-feedback span, .review-score, .review-username {
 	font-size: 20px;
 	font-weight: bold;
+}
+
+.review-score {
+	color:red;
+}
+
+.filter-topn {
+	text-decoration: none;
+}
+
+.padded-row {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.vertically-align {
+	display: flex;
+	align-items: center;
 }

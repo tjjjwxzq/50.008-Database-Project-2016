@@ -13,148 +13,119 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row padded-row">
     <div class="col-md-12">
-
-      <h1>
+      <h1 class="book-title">
         {{ book.title }}
         <small>by {{ ', '.join(book.authors) }}</small>
       </h1>
+      <p class="book-format">{{ book.format }}, Published in {{ book.year_of_publication }} by {{ book.publisher }}</p>
+    </div>
+  </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <p>
-            <strong>ISBN:</strong>
-            {{ '{}-{}'.format(book.ISBN[0:3], book.ISBN[3:]) }}
-          </p>
-          <p>
-            <strong>Publisher:</strong>
-            {{ book.publisher }}
-          </p>
-          <p>
-            <strong>Year of Publication:</strong>
-            {{ book.year_of_publication }}
-          </p>
-          <p>
-            <strong>Stock:</strong>
-            {{ book.stock }}
-          </p>
-          <p>
-            <strong>Price:</strong>
-            ${{ book.price }}
-          </p>
-          <p>
-            <strong>Format:</strong>
-            {{ book.format }}
-          </p>
-          <p>
-            <strong>Keywords:</strong>
-            {{ ', '.join(book.keywords) }}
-          </p>
+  <div class="row">
+    <div class="col-md-1">
+      <p>
+        <strong>ISBN:</strong>
+      </p>
+      <p>
+        <strong>Stock:</strong>
+      </p>
+      <p>
+        <strong>Price:</strong>
+      </p>
+      <p>
+        <strong>Keywords:</strong>
+      </p>
+    </div>
+
+    <div class="col-md-11">
+      <p>
+        {{ '{}-{}'.format(book.ISBN[0:3], book.ISBN[3:]) }}
+      </p>
+      <p>
+        {{ book.stock }}
+      </p>
+      <p>
+        ${{ book.price }}
+      </p>
+      <p>
+        {{ ', '.join(book.keywords) }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row underline padded-row">
+    <div class="col-md-12">
+      <h3 class="pull-left reviews-title">Our Community Reviews</h3>
+      <div class="pull-right">
+        {% if not current_user_review %}
+          <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-md">
+          Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row padded-row underline">
+    <div class="col-md-12">
+      <h5 style="margin:0">
+        <a class="filter-topn" data-toggle="collapse" href="#collapseFilter" aria-expanded="false" aria-controls="collapseExample">
+          Filter by Best Reviews
+        </a>
+      </h5>
+      <div class="collapse" id="collapseFilter">
+        <div class="card card-block">
+          <form method="POST" action="{{ url_for('my.show_book', ISBN=book.ISBN) }}">
+            {{ top_review_form.csrf_token}}
+            {{ render_field(top_review_form.num_of_reviews, class="form-control", placeholder="Number of reviews", type="number") }}
+            <input type="submit" class="btn btn-success" value="Show"/>
+          </form>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="panel panel-default">
+  {% for review in reviews %}
 
-            <div class="panel-heading clearfix">
-              <div class="panel-title pull-left">
-                Reviews on {{ book.title }}
-              </div>
-              <div class="pull-right">
-                {% if not current_user_review %}
+    <div class="row padded-row vertically-align">
+      <div class="col-md-8 review">
+        <span class="review-username">{{ review[0].username }}</span><p style="float:right;"> gave it a <span class="review-score">{{ review[0].score }}</span> /10 </p>
 
-                  <a href="{{ url_for('my.create_book_review', ISBN=book.ISBN) }}" type="button" class="btn btn-primary btn-lg">
-                  Create Review <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                  </a>
-
-                {% endif %}
-              </div>
-            </div>
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-md-6">
-                  <form method="POST" action="{{ url_for('my.show_book', ISBN=book.ISBN) }}">
-                    {{ top_review_form.csrf_token}}
-                    {{ render_field(top_review_form.num_of_reviews, class="form-control", placeholder="Number of reviews", type="number") }}
-                    <input type="submit" class="btn btn-success" value="Show"/>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="row text-center">
-                <div class="col-md-2">
-                  Review Score
-                </div>
-                <div class="col-md-4">
-                  Review Description
-                </div>
-                <div class="col-md-3">
-                  Reviewer
-                </div>
-                <div class="col-md-3">
-                  Review Rating
-                </div>
-              </div>
-            </div>
-
-            <ul class="list-group">
-
-              {% for review in reviews %}
-
-                <li class="list-group-item">
-                  <div class="row text-center">
-                    <div class="col-md-2 review-score">
-                      {{ review[0].score }}
-                    </div>
-                    <div class="col-md-4">
-                      {{ review[0].description }}
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row review-username">
-                        {{ review[0].username }}
-                      </div>
-                      <div class="row">
-                        {{ review[0].date }}
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row avg-feedback">
-                        {% if review[1] == -1 %}
-                          No Feedback yet
-                        {% else %}
-                          Average Feedback: <br/>
-                          <span>{{ review[1] }}</span>
-                        {% endif %}
-                      </div>
-                      <div class="row text-center">
-                        {% if review[0].username == user %}
-                          You cannot rate your own review.
-                        {% elif not review[2] %}
-                          <form method="POST" action="{{ url_for('my.create_feedback', ISBN=book.ISBN, user=review[0].username) }}">
-                            {{ feedback_form.csrf_token }}
-                            {{ feedback_form.rating }}
-                            <input type="submit" class="btn btn-success" value="Create"/>
-                          </form>
-                        {% else %}
-                          You have rated review already.
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-              {% endfor %}
-
-            </ul>
-
+        <div class="row">
+          <div class="col-md-12">
+            {{ review[0].date }} <br/>
+            {{ review[0].description }}
           </div>
         </div>
       </div>
 
+      <div class="col-md-4 avg-feedback">
+        <div class="row text-center">
+          {% if review[1] == -1 %}
+            No Feedback yet
+          {% else %}
+            Average Feedback: <br/>
+            <span>{{ review[1] }}</span>
+          {% endif %}
+        </div>
+        <div class="row text-center">
+          {% if review[0].username == user %}
+            You cannot rate your own review.
+          {% elif not review[2] %}
+            <form method="POST" action="{{ url_for('my.create_feedback', ISBN=book.ISBN, user=review[0].username) }}">
+              {{ feedback_form.csrf_token }}
+              {{ feedback_form.rating }}
+              <input type="submit" class="btn btn-success" value="Create"/>
+            </form>
+          {% else %}
+            You have rated review already.
+          {% endif %}
+        </div>
+      </div>
     </div>
-  </div>
+
+  {% endfor %}
 </div>
 {% endblock %}
