@@ -1,5 +1,8 @@
 {% extends "layout/base.html" %}
 {% block title %}My Reviews History{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my/user/reviews.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -7,60 +10,31 @@
     <h1>My Review History<span></span></h1>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
+  {% for review in reviews %}
+  <div class="row padded-row vertically-align">
+    <div class="col-md-8 review">
+      <span class="review-book">{{ review[0].book.title }}</span><p style="float:right;"> I gave it a <span class="review-score">{{ review[0].score }}</span> /10 </p>
 
-        <div class="panel-heading clearfix">
-          <div class="panel-title pull-left">
-            {{ user.username }}'s Reviews
-          </div>
+      <div class="row">
+        <div class="col-md-12">
+          {{ review[0].date }} <br/>
+          {{ review[0].description }}
         </div>
+      </div>
+    </div>
 
-        <div class="panel-body">
-          <div class="row">
-          	<div class="col-md-3">
-          	  Book
-          	</div>
-          	<div class="col-md-3">
-          	  Score
-          	</div>
-          	<div class="col-md-3">
-          	  Description
-          	</div>
-          	<div class="col-md-3">
-          	  Date
-          	</div>
-          </div>
-        </div>
-
-        <ul class="list-group">
-
-          {% for review in user.reviews %}
-
-            <li class="list-group-item">
-              <div class="row">
-                <div class="col-md-3">
-                  {{ review.book.title }}
-                </div>
-                <div class="col-md-3">
-                  {{ review.score }}
-                </div>
-                <div class="col-md-3">
-                  {{ review.description }}
-                </div>
-                <div class="col-md-3">
-                  {{ review.date }}
-                </div>
-              </div>
-            </li>
-
-          {% endfor %}
-
-        </ul>
-
+    <div class="col-md-4 avg-feedback">
+      <div class="row text-center">
+        {% if review[1] == -1 %}
+          No Feedback yet
+        {% else %}
+          Average Feedback: <br/>
+          <span>{{ review[1] }}</span>
+        {% endif %}
       </div>
     </div>
   </div>
+  {% endfor %}
+
 </div>
 {% endblock %}

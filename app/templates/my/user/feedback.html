@@ -1,5 +1,8 @@
 {% extends "layout/base.html" %}
 {% block title %}My Feedback History{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my/user/feedback.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -7,60 +10,27 @@
     <h1>My Feedback History<span></span></h1>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
+  {% for feedback in user.feedback %}
+  <div class="row padded-row vertically-align">
+    <div class="col-md-8 review">
+      <span class="review-book">{{ feedback.review.book.title }}</span><p style="float:right;"> {{ feedback.review.username }} gave it a <span class="review-score">{{ feedback.review.score }}</span> /10 </p>
 
-        <div class="panel-heading clearfix">
-          <div class="panel-title pull-left">
-            {{ user.username }}'s Feedback
-          </div>
+      <div class="row">
+        <div class="col-md-12">
+          {{ feedback.review.date }} <br/>
+          {{ feedback.review.description }}
         </div>
+      </div>
+    </div>
 
-        <div class="panel-body">
-          <div class="row">
-          	<div class="col-md-3">
-          	  Book
-          	</div>
-          	<div class="col-md-3">
-          	  Review Description
-          	</div>
-          	<div class="col-md-3">
-          	  Reviewer
-          	</div>
-          	<div class="col-md-3">
-          	  My Rating
-          	</div>
-          </div>
-        </div>
-
-        <ul class="list-group">
-
-          {% for feedback in user.feedback %}
-
-            <li class="list-group-item">
-              <div class="row">
-                <div class="col-md-3">
-                  {{ feedback.review.book.title }}
-                </div>
-                <div class="col-md-3">
-                  {{ feedback.review.description }}
-                </div>
-                <div class="col-md-3">
-                  {{ feedback.review.username }}
-                </div>
-                <div class="col-md-3">
-                  {{ feedback.rating }}
-                </div>
-              </div>
-            </li>
-
-          {% endfor %}
-
-        </ul>
-
+    <div class="col-md-4 avg-feedback">
+      <div class="row text-center">
+        You Rated <br/>
+        <span>{{ feedback.rating }}</span>
       </div>
     </div>
   </div>
+  {% endfor %}
+
 </div>
 {% endblock %}
