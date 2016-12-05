@@ -38,49 +38,70 @@
         </div>
       </div>
 
-      <div class="row">
-        {% for book in books %}
-        <div class="col-md-3">
-          <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
-            <strong>{{ book.title }}</strong>
-          </a>
-
-          {% if order_in_progress %}
-            <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
-              {{ add_book_to_order_forms[loop.index0].csrf_token }}
-              {{ add_book_to_order_forms[loop.index0].isbn(value="{}".format(book.ISBN)) }}
-              {{ render_field(add_book_to_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=book).first().quantity) }}
-              <input type="submit" class="btn btn-success" value="Update Order">
-            </form>
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
-
       {% if recommended_books %}
 
         <div class="row">
-          <div class="col-md-12">
-            <h3>Users who ordered <strong>{{ ordered_book.title }}</strong> also ordered:</h3>
+
+          <div class = "col-md-9">
+            {% for book in books %}
+              <div class="col-md-4">
+                <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
+                  <strong>{{ book.title }}</strong>
+                </a>
+
+                {% if order_in_progress %}
+                  <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
+                    {{ add_book_to_order_forms[loop.index0].csrf_token }}
+                    {{ add_book_to_order_forms[loop.index0].isbn(value="{}".format(book.ISBN)) }}
+                    {{ render_field(add_book_to_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=book).first().quantity) }}
+                    <input type="submit" class="btn btn-success" value="Update Order">
+                  </form>
+                {% endif %}
+              </div>
+            {% endfor %}
           </div>
 
-          {% for recommended_book in recommended_books %}
           <div class="col-md-3">
-            <a href="{{ url_for('my.show_book', ISBN=recommended_book.ISBN) }}" class="thumbnail">
-              <strong>{{ recommended_book.title }}</strong>
-            </a>
+            <h3>Users who ordered <strong>{{ ordered_book.title }}</strong> also ordered:</h3>
 
-            {% if order_in_progress %}
-              <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
-                {{ recommended_books_order_forms[loop.index0].csrf_token }}
-                {{ recommended_books_order_forms[loop.index0].isbn(value="{}".format(recommended_book.ISBN)) }}
-                {{ render_field(recommended_books_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=recommended_book).first().quantity) }}
-                <input type="submit" class="btn btn-success" value="Update Order">
-              </form>
-            {% endif %}
+            {% for recommended_book in recommended_books %}
+              <a href="{{ url_for('my.show_book', ISBN=recommended_book.ISBN) }}" class="thumbnail">
+                <strong>{{ recommended_book.title }}</strong>
+              </a>
+
+              {% if order_in_progress %}
+                <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
+                  {{ recommended_books_order_forms[loop.index0].csrf_token }}
+                  {{ recommended_books_order_forms[loop.index0].isbn(value="{}".format(recommended_book.ISBN)) }}
+                  {{ render_field(recommended_books_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=recommended_book).first().quantity) }}
+                  <input type="submit" class="btn btn-success" value="Update Order">
+                </form>
+              {% endif %}
+            {% endfor %}
           </div>
-          {% endfor %}
+
         </div>
+
+      {% else %}
+
+        <div class="row">
+
+          {% for book in books %}
+            <div class="col-md-3">
+              <a href="{{ url_for('my.show_book', ISBN=book.ISBN)}}" class="thumbnail">
+                <strong>{{ book.title }}</strong>
+              </a>
+
+              {% if order_in_progress %}
+                <form method="POST" action="{{ url_for('my.update_order', order_id=order_in_progress.id) }}">
+                  {{ add_book_to_order_forms[loop.index0].csrf_token }}
+                  {{ add_book_to_order_forms[loop.index0].isbn(value="{}".format(book.ISBN)) }}
+                  {{ render_field(add_book_to_order_forms[loop.index0].quantity, class="form-control", type="number", min=1, value=order_in_progress.books_orders.filter_by(book=book).first().quantity) }}
+                  <input type="submit" class="btn btn-success" value="Update Order">
+                </form>
+              {% endif %}
+            </div>
+          {% endfor %}
 
       {% endif %}
 
