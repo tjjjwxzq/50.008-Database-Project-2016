@@ -3,8 +3,8 @@ from sqlalchemy import text
 
 insert_customer = text(
     """INSERT INTO customer VALUES
-    ('user1', 'password', 'foo', 'bar', '12345678', '8 Somapah Rd'),
-    ('user2', 'password2', 'foo', 'bar', '12345678', '8 Somapah Rd')"""
+    ('user1', 'password', 'foo', 'bar', '12345678', '8 Somapah Rd', '12345678'),
+    ('user2', 'password2', 'foo', 'bar', '12345678', '8 Somapah Rd', '12345678')"""
 )
 
 delete_customer = text(

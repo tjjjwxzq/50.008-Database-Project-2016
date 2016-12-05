@@ -17,6 +17,7 @@ class Customer(db.Model, UserMixin):
     last_name = db.Column(db.String(), nullable=False)
     credit_card_number = db.Column(db.String(), nullable=False)
     address = db.Column(db.String(), nullable=False)
+    phone_number = db.Column(db.String(8), nullable=False)
     reviews = db.relationship('Review',
                               backref=db.backref('customer', lazy='joined'),
                               lazy='dynamic'
