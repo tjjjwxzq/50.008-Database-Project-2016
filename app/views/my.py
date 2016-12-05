@@ -81,8 +81,8 @@ def show_book(ISBN):
                 avg_of_feedbacks = get_average_feedback(review)
                 whole_reviews.append((review, avg_of_feedbacks, feedback_exists(review)))
 
-            sorted_reviews = sorted(whole_reviews, key=lambda x:x[1])
-            top_n_reviews = sorted_reviews[-n:]
+            sorted_reviews = sorted(whole_reviews, key=lambda x:x[1], reverse=True)
+            top_n_reviews = sorted_reviews[0:n]
             reviews = top_n_reviews
 
     else:
