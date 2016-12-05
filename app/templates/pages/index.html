@@ -6,40 +6,47 @@
 
 {% block content %}
 {% if current_user.is_authenticated %}
-  <div class="container-fluid">
-	<div class="row welcome-title">
-	  <h1 class="text-center">Welcome to the bookstore!</h1>
-	</div>
-  </div>
-
   <div class="container">
-	<div class="row" style="padding-top:20px;">
+    <div class="row page-title">
+      <h1 class="text-center">Welcome to the bookstore!<span></span></h1>
+    </div>
 
- 	  <div class="col-md-2 col-md-offset-1 text-center">
-		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-		<a href="{{ url_for('my.get_account_information') }}">My Account Information</a>
-	  </div>
+  	<div class="row home-page" style="padding-top:20px;">
+   	  <div class="col-md-2 col-md-offset-1 text-center action-1">
+    		<div class="row"><a href="{{ url_for('my.get_account_information') }}"><span class="glyphicon glyphicon-user circle-icon" aria-hidden="true"></span></a>
+    		</div>
+        <div class="row"><a href="{{ url_for('my.get_account_information') }}">My Account Information</a>
+    	  </div>
+      </div>
 
-	  <div class="col-md-2 text-center">
-		<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-		<a href="{{ url_for('my.book_index') }}">Browse Books</a>
-	  </div>
+  	  <div class="col-md-2 text-center">
+    		<div class="row"><a href="{{ url_for('my.book_index') }}"><span class="glyphicon glyphicon-book circle-icon" aria-hidden="true"></span></a>
+    		</div>
+        <div class="row"><a href="{{ url_for('my.book_index') }}">Browse Books</a>
+    	  </div>
+      </div>
 
-	  <div class="col-md-2 text-center">
-		<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-		<a href="{{ url_for('my.get_review_history') }}">My Review History</a>
-	  </div>
+  	  <div class="col-md-2 text-center">
+    		<div class="row"><a href="{{ url_for('my.get_review_history') }}"><span class="glyphicon glyphicon-list-alt circle-icon" aria-hidden="true"></span></a>
+    		</div>
+        <div class="row"><a href="{{ url_for('my.get_review_history') }}">My Review History</a>
+    	  </div>
+      </div>
 
-	  <div class="col-md-2 text-center">
-		<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-		<a href="{{ url_for('my.get_feedback_history') }}">My Feedback History</a>
-	  </div>
+  	  <div class="col-md-2 text-center">
+    		<div class="row"><a href="{{ url_for('my.get_feedback_history') }}"><span class="glyphicon glyphicon-list-alt circle-icon" aria-hidden="true"></span></a>
+    		</div>
+        <div class="row"><a href="{{ url_for('my.get_feedback_history') }}">My Feedback History</a>
+    	  </div>
+      </div>
 
-	  <div class="col-md-2 text-center">
-		<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-		<a href="{{ url_for('my.order_index') }}">My Order History</a>
-	  </div>
-	</div>
+  	  <div class="col-md-2 text-center">
+    		<div class="row"><a href="{{ url_for('my.order_index') }}"><span class="glyphicon glyphicon-shopping-cart circle-icon" aria-hidden="true"></span></a>
+    		</div>
+        <div class="row"><a href="{{ url_for('my.order_index') }}">My Order History</a>
+    	  </div>
+      </div>
+  	</div>
   </div>
 {% elif store_manager_logged_in() %}
  <div class="jumbotron">
@@ -73,6 +80,11 @@
     </div>
   </div>
 {% else %}
+<style>
+  body {
+    overflow-y:hidden;
+  }
+</style>
   <div class="jumbotron">
     <div class="container">
       <div class="row">

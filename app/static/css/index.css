@@ -9,6 +9,7 @@
   text-align: center;
 
   background-image: url('../images/books.jpg');
+  background-size: cover;
 }
 
 .jumbotron h1, p {
@@ -36,4 +37,28 @@
 
 .thumbnail p {
   color: #000;
+}
+
+.home-page .glyphicon {
+  font-size:40px;
+}
+
+.home-page a {
+  font-size: 20px;
+  color:black;
+  letter-spacing:2px;
+}
+
+.circle-icon {
+  border: 3px solid black;
+  border-radius: 50%;
+  width:100px;
+  height:100px;
+  line-height: 96px;
+  margin-bottom: 10px;
+}
+
+.circle-icon:hover{
+  color:white;
+  background: black;
 }

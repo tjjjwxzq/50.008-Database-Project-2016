@@ -101,3 +101,6 @@ class StatisticsForm(FlaskForm):
         (12, 'December')
     ])
     number = IntegerField('Number')
+
+class SetNofTopReviewsForm(FlaskForm):
+    num_of_reviews = IntegerField('Show Number of Top Reviews')

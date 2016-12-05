@@ -1,0 +1,24 @@
+@import url('/static/css/base.css');
+
+.avg-feedback span, .review-score, .review-book {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.review-score {
+	color:red;
+}
+
+.review {
+	border-right: 1px solid black;
+}
+
+.padded-row {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.vertically-align {
+	display: flex;
+	align-items: center;
+}

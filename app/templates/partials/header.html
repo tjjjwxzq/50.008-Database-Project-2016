@@ -1,14 +1,14 @@
 <header>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-inverse">
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color:#333">
 
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-nav" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="glyphicon glyphicon-menu-hamburger"></span>
         </button>
-        <a href="{{ url_for('pages.index') }}" class="navbar-brand"><span class="glyphicon glyphicon-book"</a>
+        <a href="{{ url_for('pages.index') }}" class="navbar-brand" style="padding:5px 15px"><img class="img-responsive" src="{{ url_for('static', filename='images/logo4.png') }}" width="60%"></a>
       </div>
 
       <div class="collapse navbar-collapse" id="header-nav">
@@ -21,8 +21,8 @@
             {% else %}
               <li><a href="{{ url_for('store_manager.login') }}">Managers</a></li>
               <li><a href="{{ url_for('customer.login') }}">Login</a></li>
+              <li><a href="{{ url_for('customer.sign_up') }}">Sign Up</a></li>
             {% endif %}
-            <li><a href="{{ url_for('customer.sign_up') }}">Sign Up</a></li>
           {% endif %}
           </ul>
       </div>
