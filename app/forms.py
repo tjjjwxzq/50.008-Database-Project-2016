@@ -18,6 +18,8 @@ class CustomerSignUpForm(FlaskForm):
     last_name = StringField('Last name', validators=[DataRequired()])
     credit_card_number = StringField('Credit Card Number', validators=[DataRequired(),
                                                                        Length(min=10, max=19)])
+    phone_number = StringField('Phone Number', validators=[DataRequired(),
+                                                           Length(min=8, max=8, message='Phone number should be 8 digits long')])
     address = StringField('Address', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(),
                                                    Length(min=6, message='Password should be at least 6 characters long')])

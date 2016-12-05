@@ -32,13 +32,14 @@ class Customer(db.Model, UserMixin):
                                 order_by='desc(Feedback.rating)'
                                )
 
-    def __init__(self, username, password, first_name, last_name, credit_card_number, address):
-        self.username = username
-        self.password = password
-        self.first_name = first_name
-        self.last_name = last_name
-        self.credit_card_number = credit_card_number
-        self.address = address
+    def __init__(self, **kwargs):
+        self.username = kwargs['username']
+        self.password = kwargs['password']
+        self.first_name = kwargs['first_name']
+        self.last_name = kwargs['last_name']
+        self.credit_card_number = kwargs['credit_card_number']
+        self.phone_number = kwargs['phone_number']
+        self.address = kwargs['address']
 
     def __repr__(self):
         return 'Customer {}'.format(self.username)
