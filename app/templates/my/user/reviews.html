@@ -10,6 +10,10 @@
     <h1>My Review History<span></span></h1>
   </div>
 
+  {% if reviews == [] %}
+    <p class="text-center">You haven't reviewed any books yet.</p>
+  {% endif %}
+
   {% for review in reviews %}
   <div class="row padded-row vertically-align">
     <div class="col-md-8 review">
