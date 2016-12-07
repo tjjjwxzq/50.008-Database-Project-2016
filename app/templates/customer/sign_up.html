@@ -4,10 +4,12 @@
 
 {% block content %}
 <div class="container">
-  <div class="row" style="display:flex;justify-content:center;">
+  <div class="row centralise">
     <div class="col-md-8 col-offset-2">
 
-      <h1 class="text-center">Customer Sign Up</h1>
+      <div class="row page-title">
+        <h1>Sign Up<span></span></h1>
+      </div>
 
       <form method="POST" action="{{ url_for('customer.sign_up') }}">
         {{ form.csrf_token }}
