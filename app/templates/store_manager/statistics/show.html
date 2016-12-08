@@ -7,7 +7,9 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1>Statistics</h1>
+      <div class="row page-title">
+        <h1 class="text-center">Statistics<span></span></h1>
+      </div>
 
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -27,22 +29,23 @@
       </div>
 
       <div class="row">
-        <h2>Most Popular Books</h2>
-        {% if not books %}
-        <p>No books were sold in this month</p>
-        {% endif %}
+        <div class="col-md-12">
+          <h2>Most Popular Books</h2>
+          {% if not books %}
+          <p>No books were sold in this month</p>
+          {% endif %}
 
-        {% for book in books %}
-        <div class="col-md-3">
-          <a href="{{ url_for('store_manager.edit_book', ISBN=book.ISBN)}}" class="thumbnail">
-            <p><strong>{{ book.title }}</strong></p>
-          </a>
+          {% for book in books %}
+          <div class="col-md-3">
+            <a href="{{ url_for('store_manager.edit_book', ISBN=book.ISBN)}}" class="thumbnail">
+              <p><strong>{{ book.title }}</strong></p>
+            </a>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
 
       <div class="row">
-
         <div class="col-md-6">
           <h2>Most Popular Authors</h2>
           {% if not books %}

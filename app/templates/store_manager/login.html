@@ -4,16 +4,18 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-8 col-offset-2">
+  <div class="row centralise">
+    <div class="col-md-6 col-offset-4">
 
-      <h1>Store Manager Login</h1>
+      <div class="row page-title">
+        <h1>Manager Login<span></span></h1>
+      </div>
 
       <form method="POST" action="{{ url_for('store_manager.login') }}">
         {{ form.csrf_token }}
         {{ render_field(form.username, class="form-control", placeholder="Username") }}
         {{ render_field(form.password, class="form-control", placeholder="Password") }}
-        <input type="submit" class="btn btn-primary" value="Login"/>
+        <input type="submit" class="btn btn-primary btn-block" value="Login"/>
       </form>
 
     </div>

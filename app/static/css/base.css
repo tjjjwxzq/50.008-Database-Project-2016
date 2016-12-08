@@ -1,5 +1,14 @@
 @import url('lib/bootstrap.min.css');
 
+body {
+  background-color: beige;
+}
+
+.container {
+  background-color: white;
+  min-height: 88vh;
+}
+
 header .navbar {
   margin-bottom: 0;
 }
@@ -23,4 +32,9 @@ header .navbar {
   width: 100%;
   margin: 0 auto;
   margin-top: 10px;
+}
+
+.centralise {
+  display:flex;
+  justify-content:center;
 }
