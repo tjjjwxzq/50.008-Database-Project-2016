@@ -497,10 +497,7 @@ insert_reviews = text(
     ('9780073376332', 'madde', 2, ' wasted my afternoon.', CURRENT_DATE),
     ('9780470169926', 'juan', 2, ' wasted my afternoon.', CURRENT_DATE),
     ('9780470169926', 'madde', 0, ' This is not worth your time.', CURRENT_DATE),
-    ('9780470169926', 'rongying', 2, ' wasted my afternoon.', CURRENT_DATE),
-    ('9780321197849', 'charmaine', 2, ' wasted my afternoon.', CURRENT_DATE),
-    ('9780321197849', 'user1', 5, ' This is merely mediocre.', CURRENT_DATE),
-    ('9780321197849', 'user2', 4, ' This is disappointing, I had expected a more intriguing read but really, it was not.', CURRENT_DATE)"""
+    ('9780470169926', 'rongying', 2, ' wasted my afternoon.', CURRENT_DATE)"""
 )
 
 delete_reviews = text(
@@ -847,10 +844,7 @@ insert_feedbacks = text(
     ('junqi', 2, 'madde', '9780073376332'),
     ('madde', '1', 'juan', '9780470169926'),
     ('charmaine', '1', 'madde', '9780470169926'),
-    ('user2', '0', 'rongying', '9780470169926'),
-    ('rongying', '1', 'charmaine', '9780321197849'),
-    ('rongying', 2, 'user1', '9780321197849'),
-    ('madde', 2, 'user2', '9780321197849')"""
+    ('user2', '0', 'rongying', '9780470169926')"""
 )
 
 delete_feedbacks = text(
