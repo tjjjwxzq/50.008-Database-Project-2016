@@ -7,6 +7,7 @@ def save(resource):
         db.session.commit()
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         db.session.flush()
         return False

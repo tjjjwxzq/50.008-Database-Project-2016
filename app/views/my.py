@@ -123,7 +123,7 @@ def create_book_review(ISBN):
             'username': current_user.get_id(),
             'score': form.score.data,
             'description': form.description.data,
-            'date': time.strftime("%x")
+            'date': time.strftime("%Y-%m-%d")
         }
 
         if Review.query.filter_by(username=current_user.get_id(), ISBN=book.ISBN).first() is None:
@@ -143,7 +143,7 @@ def create_book_review(ISBN):
 @mod.route('/orders/')
 @login_required
 def order_index():
-    orders = Order.query.all()
+    orders = current_user.orders.all()
 
     return render_template('my/order/index.html', orders=orders)
 
@@ -151,7 +151,7 @@ def order_index():
 @login_required
 def create_order():
     order_params = {
-        'date' : time.strftime('%Y-%m-%d%'),
+        'date' : time.strftime('%Y-%m-%d'),
         'status': 'in_progress',
         'customer_username': current_user.get_id()
     }
